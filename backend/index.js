@@ -1,17 +1,19 @@
 const express = require('express');
 const { mongoDB } = require('./config/mongodb.js');
-const Product = require('./models/product.model.js');
-const productRoute = require('./routes/product.route.js');
+
+const User = require('./models/user.model.js');
+const userRoute = require('./routes/user.route.js');
+
 const app = express();
 
 // middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-mongoDB();
 
 //routes
-app.use('/api/products', productRoute);
+app.use('/api/users', userRoute);
 
+mongoDB();
 app.listen(3000, () => {
   console.log('server running');
 });
