@@ -73,3 +73,6 @@ diary app/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 # Temporary auto-generated Android Assets
 diary app/[Aa]ssets/[Ss]treamingAssets/aa.meta
 diary app/[Aa]ssets/[Ss]treamingAssets/aa/*
+
+
+__pycache__
