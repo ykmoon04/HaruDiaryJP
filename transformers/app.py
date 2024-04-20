@@ -1,19 +1,15 @@
 import analyze
-import json
-from flask import Flask
-import requests
-
+from flask import Flask,request
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return 'Hello, World!'
+    return 'Japanese Sentiment Analysis'
 
 @app.route('/eval', methods=['POST'])
 def eval():
-    ''' get parameter '''
-    return analyze.analyze_emotion("")
-
+    params = request.get_json()
+    return analyze.analyze_emotion(params["text"])
 
 
 if __name__ == '__main__':
