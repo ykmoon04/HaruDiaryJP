@@ -12,7 +12,7 @@ def np_softmax(x):
     f_x = np.exp(x) / np.sum(np.exp(x))
     return f_x
 
-def analyze_emotion(text, show_fig=False):
+def analyze_emotion(text):
     model.eval()
 
     tokens = tokenizer(text, truncation=True, return_tensors="pt")
@@ -23,4 +23,4 @@ def analyze_emotion(text, show_fig=False):
 
     print(out_dict)
 
-analyze_emotion('傘持たなかったのに急に雨が降り始めて濡れちゃった。アンラッキーすぎ')
+# analyze_emotion('傘持たなかったのに急に雨が降り始めて濡れちゃった。アンラッキーすぎ')
