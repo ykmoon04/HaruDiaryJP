@@ -20,25 +20,23 @@ public class HttpRequest : MonoBehaviour
     // Get
     private IEnumerator UnityWebRequestGET<T>(string url, Action<T> onSuccess, Action<string> onFailed)
     {
-		// UnityWebRequest에 내장되있는 GET 메소드를 사용한다.
-        UnityWebRequest request = UnityWebRequest.Get(url);
+        // UnityWebRequest에 내장되있는 GET 메소드를 사용한다.
+        using (UnityWebRequest request = UnityWebRequest.Get(url)){
+            yield return request.SendWebRequest();  // 응답이 올때까지 대기한다.
 
-        yield return request.SendWebRequest();  // 응답이 올때까지 대기한다.
-
-        if (request.error == null)  // 통신 성공
-        {
-            T res = JsonUtility.FromJson<T>(request.downloadHandler.text);
-            if(request.responseCode ==200){ // 처리 실패
-                onSuccess?.Invoke(res);
+            // Check for errors first
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError) {
+                onFailed?.Invoke(request.error);
             }
-            else{ // 처리 성공
-                onFailed?.Invoke(request.responseCode.ToString());
+            else{
+                T res = JsonUtility.FromJson<T>(request.downloadHandler.text);
+                if (request.responseCode == 200){
+                    onSuccess?.Invoke(res);
+                }
+                else{
+                    onFailed?.Invoke(request.responseCode.ToString());
+                }
             }
-        }
-        else // 통신 실패
-        {
-            onFailed?.Invoke(request.error);
-            // Debug.Log(request.error);
         }
     }
 
@@ -51,47 +49,31 @@ public class HttpRequest : MonoBehaviour
     // POST
     private IEnumerator UnityWebRequestPOST<T>(string url, string jsonString, Action<T> onSuccess, Action<string> onFailed)
     {   
-        var request = new UnityWebRequest(url, "POST");
-        byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonString);
+        using (var request = new UnityWebRequest(url, "POST")){
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonString);
 
-        if(request.uploadHandler != null) request.uploadHandler.Dispose();
-        request.uploadHandler = (UploadHandler) new UploadHandlerRaw(bodyRaw);
-        request.downloadHandler = (DownloadHandler) new DownloadHandlerBuffer();
-        request.SetRequestHeader("Content-Type", "application/json");
-        yield return request.SendWebRequest();
-        
-        if (request.error == null) // 통신 성공
-        {
-            T res = JsonUtility.FromJson<T>(request.downloadHandler.text);
-            Debug.Log(res);
-            Debug.Log(request.downloadHandler.text);
-
-            if (request.responseCode == 200){
-                onSuccess?.Invoke(res);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            
+            yield return request.SendWebRequest();
+            
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+            {
+                onFailed?.Invoke(request.error);
             }
-            else {
-                onFailed?.Invoke(request.responseCode.ToString());
+            else
+            {
+                T res = JsonUtility.FromJson<T>(request.downloadHandler.text);
+                if (request.responseCode == 200)
+                {
+                    onSuccess?.Invoke(res);
+                }
+                else
+                {
+                    onFailed?.Invoke(request.responseCode.ToString());
+                }
             }
-
-    /*
-            if(url.Contains("tree_list")){
-
-                TreeList trees = JsonUtility.FromJson<TreeList>(request.downloadHandler.text);
-                 
-                GameManager.i.SetTreeList(trees);
-                onSuccess?.Invoke(res.data);
-            }
-            else if(res.message.Contains("fail")){ // 처리 실패
-
-                onFailed?.Invoke(res.message);
-            }
-            else{ // 처리 성공
-                onSuccess?.Invoke(res.data);
-            }*/
-        }
-        else // 통신 실패
-        {
-            onFailed?.Invoke(request.error);
         }
     }
 }
