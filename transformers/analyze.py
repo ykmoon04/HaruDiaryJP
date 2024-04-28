@@ -8,7 +8,7 @@ tokenizer = AutoTokenizer.from_pretrained(checkpoint)
 
 model = AutoModelForSequenceClassification.from_pretrained("stopovermoon/japanese-sentiment-analysis", token = "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")
 
-emotion_names_jp = ['喜び', '悲しみ', '驚き', '怒り', '恐れ', '嫌悪']
+emotion_names = ['joy', 'sadness', 'surprise', 'angry', 'fear', 'disgust']
 
 def np_softmax(x):
     f_x = np.exp(x) / np.sum(np.exp(x))
@@ -21,7 +21,7 @@ def analyze_emotion(text):
     tokens.to(model.device)
     preds = model(**tokens)
     prob = np_softmax(preds.logits.cpu().detach().numpy()[0])
-    out_dict = {n: p for n, p in zip(emotion_names_jp, prob)}
+    out_dict = {n: p for n, p in zip(emotion_names, prob)}
 
     return json.dumps(out_dict, default=convert_to_serializable)
 
