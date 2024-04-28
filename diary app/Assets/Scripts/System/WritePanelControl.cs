@@ -6,6 +6,8 @@ using TMPro;
 using System;
 
 
+// 다이어리 쓰기 관련
+
 public class WritePanelControl : MonoBehaviour
 {
     [SerializeField]
@@ -110,3 +112,4 @@ public class WritePanelControl : MonoBehaviour
         }
     }
 }
+

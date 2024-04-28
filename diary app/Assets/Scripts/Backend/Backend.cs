@@ -7,50 +7,115 @@ using System;
 public class Backend : MonoBehaviour
 {
     public static Backend i;
-    enum SubUrl {
-        member_create,
-        member_read,
-        member_update,
-        member_delete,
-        diary_create,
-        diary_read,
-        diary_update,
-        diary_delete,
-        tree_create,
-        tree_read,
-        tree_update,
-        tree_delete,
-        statistic_read,
-        tree_list_read
+
+    enum Resource {
+        Users,
+        Diaries,
     }
 
-    private string url = "http://15.164.6.142:8080/";
+    enum Action {
+        Create,
+        Read,
+        Update,
+        Delete
+    }
+
+
+
+    private string url = "http://localhost:3000/api/";
     private void Awake() {
         if(i==null) i=this;
         DontDestroyOnLoad(gameObject);
 
     }
 
-    // 회원가입
-    public void SignUp(string id, string password, string name, Action<string> onSuccess) {
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data.Add("id",id);
-        data.Add("password", password);
-        data.Add("name", name);
-
-        Debug.Log(DictToJson(data));
-        HttpRequest.i.Post<string>(url+SubUrl.member_create.ToString(),DictToJson(data), onSuccess, AlertOnFailed);
+    string BuildUrl(Resource resource, Action action) {
+        return $"{url}{resource.ToString().ToLower()}/{action.ToString().ToLower()}";
     }
 
-    // 로그인
-    public void ReadUser(string id, string password, Action<User> onSuccess){
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data.Add("id",id);
-        data.Add("password", password);
-
-        HttpRequest.i.Post<User>(url+SubUrl.member_read.ToString(),DictToJson(data), onSuccess, AlertOnFailed);
+    string BuildUrl(Resource resource, Action action, string param) {
+        return $"{url}{resource.ToString().ToLower()}/{action.ToString().ToLower()}/{param}";
     }
 
+    string BuildUrl(Resource resource, string param) {
+        return $"{url}{resource.ToString().ToLower()}/{param}";
+    }
+
+
+    // Create User
+    public void CreateUser(string id, string name, Action<User> onSuccess) {
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        data.Add("user_id",id);
+        // data.Add("password", password);
+        data.Add("nickname", name);
+
+        string url = BuildUrl(Resource.Users, Action.Create);
+        HttpRequest.i.Post<User>(url,DictToJson(data), onSuccess, AlertOnFailed);
+    }
+
+    public void CreateUser(string name, Action<User> onSuccess) {
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        data.Add("nickname", name);
+
+        string url = BuildUrl(Resource.Users, Action.Create);
+        HttpRequest.i.Post<User>(url,DictToJson(data), onSuccess, AlertOnFailed);
+    }
+    
+
+    
+    // Read User
+    public void ReadUser(string id, Action<User> onSuccess){
+        string url = BuildUrl(Resource.Users,id);
+        HttpRequest.i.Get<User>(url, onSuccess, AlertOnFailed);
+    }
+
+
+    // Read diary
+    public void ReadDiary(string id, string targetDate, Action<Diary> onSuccess){
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        data.Add("user_id",GameManager.i.GetUser().GetId());
+        data.Add("date", targetDate);
+
+        /*
+
+        string url = BuildUrl(Resource.Diaries, Action.Read);
+        HttpRequest.i.Post<Diary>(url,DictToJson(data), onSuccess, AlertOnFailed);
+
+        HttpRequest.i.Post<Diary>(url+SubUrl.diary_read.ToString(), DictToJson(data), onSuccess, OnFailed);
+
+        */
+    }
+
+    public void ReadDiary(string id, string targetDate, Action<Diary> onSuccess, Action<string> onFailed){
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        data.Add("user_id",GameManager.i.GetUser().GetId());
+        data.Add("date", targetDate);
+
+        /*
+
+        string url = BuildUrl(Resource.Diaries, Action.Read);
+        HttpRequest.i.Post<Diary>(url,DictToJson(data), onSuccess, AlertOnFailed);
+
+        HttpRequest.i.Post<Diary>(url+SubUrl.diary_read.ToString(), DictToJson(data), onSuccess, OnFailed);
+
+        */
+    }
+
+    
+    // \n -> \n\n으로 변환하는 거는 호출부에서
+    public void CreateDiary(string id, string text, Action<DiaryResult> onSuccess){
+        Dictionary<string, string> data = new Dictionary<string, string>();
+        data.Add("user_id",GameManager.i.GetUser().GetId());
+        data.Add("text", text);
+
+        LoadingWindow.i.StartLoading();
+
+        string url = BuildUrl(Resource.Diaries,Action.Create);
+        HttpRequest.i.Post<DiaryResult>(url, DictToJson(data), onSuccess, AlertOnFailed);
+    }
+
+
+/*???
     public void ReadUser(string id, string password, Action<User> onSuccess, Action<string> onFailed){
         Dictionary<string, string> data = new Dictionary<string, string>();
         data.Add("id",id);
@@ -58,13 +123,11 @@ public class Backend : MonoBehaviour
 
         HttpRequest.i.Post<User>(url+SubUrl.member_read.ToString(),DictToJson(data), onSuccess, onFailed);
     }
-    // 이메일 중복확인
-    public void CheckValidEmail(string id, Action<string> onSuccess, Action<string> onFailed){
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data.Add("id",id);
 
-        HttpRequest.i.Post<string>(url+SubUrl.member_read.ToString(),DictToJson(data), onSuccess, onFailed);
-    }
+    */
+
+
+/*
 
     // 유저 갱신 임시
     public void UpdateUserInfo(UserInfo field, string newData, Action<string> onSuccess){
@@ -161,17 +224,7 @@ public class Backend : MonoBehaviour
         HttpRequest.i.Post<string>(url+SubUrl.tree_create.ToString(), DictToJson(data), onSuccess, AlertOnFailed);
     }
 
-    /*
-    // 나무 갱신
-    public void UpdateObject(Action<> onSuccess){
-        
-    }
 
-    // 나무 삭제
-    public void DeleteObject(Action<> onSuccess){
-
-    }
-    */
 
     // 회원 나무 전부 조회
     public void ReadAllObjects(String id, Action<TreeList> onSuccess){
@@ -191,7 +244,7 @@ public class Backend : MonoBehaviour
     
         HttpRequest.i.Post<EmotionStats>(url+SubUrl.statistic_read.ToString(), DictToJson(data), onSuccess, OnFailed);
     }
-    
+    */
 
 
     public void OnFailed(string message){
@@ -208,4 +261,6 @@ public class Backend : MonoBehaviour
                 string.Format("\"{0}\": \"{1}\"", d.Key, string.Join(",", d.Value)));
         return "{" + string.Join(",", x) + "}";
     }
+
+    
 }

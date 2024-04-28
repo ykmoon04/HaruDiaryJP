@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 
 public class UIPopUp : MonoBehaviour
@@ -16,6 +18,8 @@ public class UIPopUp : MonoBehaviour
     Text title;
 
     Text content;
+    Button button;
+
 
     private void Awake() {
         if(i==null) i = this;
@@ -35,9 +39,17 @@ public class UIPopUp : MonoBehaviour
         }
     }
 
+    public void SetTitle(string title){
+        this.title.text = title;
+    }
+
     public void SetText(string title, string text){
         this.title.text = title;
         this.content.text = text;
+    }
+
+    public void OnClick(UnityAction action){
+        button.onClick.AddListener(action);
     }
 
     public void Show(){

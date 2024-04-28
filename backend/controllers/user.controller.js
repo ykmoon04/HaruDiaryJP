@@ -13,7 +13,9 @@ const getUserById = async (req, res) => {
 const createUser = async (req, res) => {
   try {
     const user = await User.create(req.body);
-    res.status(200).json(user);
+    const userObject = user.toObject();
+    userObject._id = userObject._id.toString();
+    res.status(200).json(userObject);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -61,8 +61,7 @@ public class statistic : MonoBehaviour
         month1.options[month1.value].text,month2.options[month2.value].text, date1.text, date2.text );
         show.text = string.Format("{0} ~ {1}", newDate.date_start, newDate.date_end);
  
-        //StartCoroutine( UnityWebRequestPOST(newDate)); 
-        Backend.i.ReadStatistics(GameManager.i.GetUser().GetId(), newDate.date_start,newDate.date_end, OnReadStatSuccess);
+        // Backend.i.ReadStatistics(GameManager.i.GetUser().GetId(), newDate.date_start,newDate.date_end, OnReadStatSuccess);
     }
 
     public void OnReadStatSuccess(EmotionStats res){
@@ -80,30 +79,5 @@ public class statistic : MonoBehaviour
         i5.fillAmount = (float)res.surprise;
     } 
     
-    IEnumerator UnityWebRequestPOST(StatisticDate newDate)
-    {
-        //string content = inputField.text;
-        string url = "http://172.30.1.37:8080/statistic_read"; // back
-        // string url = "http://10.60.3.185:5000/Diary"; // model
-
-        string bodyJsonString = JsonUtility.ToJson(newDate);
-        Debug.Log(bodyJsonString);
-        
-        var request = new UnityWebRequest(url, "POST");
-        byte[] bodyRaw = Encoding.UTF8.GetBytes(bodyJsonString);
-        request.uploadHandler = (UploadHandler) new UploadHandlerRaw(bodyRaw);
-        request.downloadHandler = (DownloadHandler) new DownloadHandlerBuffer();
-        request.SetRequestHeader("Content-Type", "application/json");
-        yield return request.SendWebRequest();
-        
-        if (request.error == null)
-        {
-            Debug.Log(request.downloadHandler.text);   
-        }
-        else
-        {
-            Debug.Log(request.error);
-        }
-    }
     
 }

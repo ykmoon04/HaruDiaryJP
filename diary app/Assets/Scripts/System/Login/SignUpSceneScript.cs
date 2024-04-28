@@ -28,11 +28,12 @@ public class SignUpSceneScript : MonoBehaviour
         passwordCheck();
         passwordEqual();
 
-
+        /*
         if(isNameValid && isEmailValid && isPwValid && isPwEqual)
         {
-            Backend.i.SignUp(email.text, password.text, username.text, onSignUpSuccess);
+            Backend.i.CreateUser(email.text, username.text, onSignUpSuccess);
         }
+        */
     }
 
     public void onSignUpSuccess(string message){

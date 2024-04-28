@@ -8,6 +8,6 @@ const {
 } = require('../controllers/user.controller.js');
 
 router.get('/:id', getUserById);
-router.post('/', createUser);
+router.post('/create', createUser);
 
 module.exports = router;

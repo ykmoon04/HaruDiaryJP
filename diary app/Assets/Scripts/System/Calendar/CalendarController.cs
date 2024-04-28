@@ -79,7 +79,6 @@ public class CalendarController : MonoBehaviour
 
                     string targetDate = String.Format("{0}{1:D2}{2:D2}",thatDay.Year, thatDay.Month, date+1);
                     if(GameManager.i.GetUser() != null){
-                        
                         Backend.i.ReadDiary(GameManager.i.GetUser().GetId(), targetDate, (res)=>{
                             // Debug.Log(targetDate);
                             if(!res.hasText()){

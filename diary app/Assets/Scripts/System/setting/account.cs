@@ -22,7 +22,7 @@ public class account : MonoBehaviour
 
     public void onclickYesBTN()
     {
-        Backend.i.DeleteUser( onDeletesuccess );
+        // Backend.i.DeleteUser( onDeletesuccess );
     }
 
     public void onclickNoBTN()

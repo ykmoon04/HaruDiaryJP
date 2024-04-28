@@ -45,6 +45,7 @@ public class DateItem : MonoBehaviour
 
         string targetDate = year+month+day;
         date.text = year +"년 " + month+"월 " + day+"일";
+        /*
         Backend.i.ReadDiary(userid, targetDate, (diary)=>{
                 diary.InitDiaryResult();
                 diaryHist.SetActive(true);
@@ -58,6 +59,7 @@ public class DateItem : MonoBehaviour
                 disgust.text = "혐오 "+Math.Round(diary.disgust*100,1);
                 fear.text = "공포 "+Math.Round(diary.fear*100,1);
         });
+        */
 
 
     }

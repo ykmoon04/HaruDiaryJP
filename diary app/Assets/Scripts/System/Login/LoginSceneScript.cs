@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 
 public class LoginSceneScript : MonoBehaviour
 {
+    /*
     public InputField passwordInput, idInput; 
     public void onSignUpBtnclick()
     {
@@ -29,4 +30,5 @@ public class LoginSceneScript : MonoBehaviour
             });
         LoadSceneManager.i.ToMain();
     }
+    */
 }

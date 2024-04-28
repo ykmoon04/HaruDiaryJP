@@ -57,6 +57,7 @@ public class GameManager : MonoBehaviour
     public void UpdateUser(){
         Debug.Log("유저 정보 업데이트 시작");
 
+/*
         Backend.i.ReadUser(user.GetId(),user.GetPassword(), (newUser)=>{
             Debug.Log("유저 정보 업데이트 성공");
             user = newUser;
@@ -64,6 +65,7 @@ public class GameManager : MonoBehaviour
             // storeUI.i.UpdateStore();
             CalendarController._calendarInstance.ReloadPanel();
         });
+        */
     }
 
     public void LogOut(){

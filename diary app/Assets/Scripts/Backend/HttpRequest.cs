@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Networking;
 using System.Text;
 using System;
@@ -29,12 +27,12 @@ public class HttpRequest : MonoBehaviour
 
         if (request.error == null)  // 통신 성공
         {
-            Response<T> res = JsonUtility.FromJson<Response<T>>(request.downloadHandler.text);
-            if(res.message.Contains("fail")){ // 처리 실패
-                onFailed?.Invoke(res.message);
+            T res = JsonUtility.FromJson<T>(request.downloadHandler.text);
+            if(request.responseCode ==200){ // 처리 실패
+                onSuccess?.Invoke(res);
             }
             else{ // 처리 성공
-                onSuccess?.Invoke(res.data);
+                onFailed?.Invoke(request.responseCode.ToString());
             }
         }
         else // 통신 실패
@@ -55,6 +53,8 @@ public class HttpRequest : MonoBehaviour
     {   
         var request = new UnityWebRequest(url, "POST");
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonString);
+
+        if(request.uploadHandler != null) request.uploadHandler.Dispose();
         request.uploadHandler = (UploadHandler) new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = (DownloadHandler) new DownloadHandlerBuffer();
         request.SetRequestHeader("Content-Type", "application/json");
@@ -62,26 +62,36 @@ public class HttpRequest : MonoBehaviour
         
         if (request.error == null) // 통신 성공
         {
-            Response<T> res = JsonUtility.FromJson<Response<T>>(request.downloadHandler.text);
+            T res = JsonUtility.FromJson<T>(request.downloadHandler.text);
+            Debug.Log(res);
             Debug.Log(request.downloadHandler.text);
+
+            if (request.responseCode == 200){
+                onSuccess?.Invoke(res);
+            }
+            else {
+                onFailed?.Invoke(request.responseCode.ToString());
+            }
+
+    /*
             if(url.Contains("tree_list")){
+
                 TreeList trees = JsonUtility.FromJson<TreeList>(request.downloadHandler.text);
                  
                 GameManager.i.SetTreeList(trees);
                 onSuccess?.Invoke(res.data);
             }
             else if(res.message.Contains("fail")){ // 처리 실패
+
                 onFailed?.Invoke(res.message);
             }
             else{ // 처리 성공
-                // Debug.Log(res.data);
                 onSuccess?.Invoke(res.data);
-            }
+            }*/
         }
         else // 통신 실패
         {
             onFailed?.Invoke(request.error);
-            // Debug.Log(request.error);
         }
     }
 }
