@@ -11,10 +11,10 @@ const DiarySchema = mongoose.Schema(
       required: true,
     },
     date: {
-      type: Date,
+      type: String,
       required: true,
     },
-    diary_result: {
+    analysis: {
       joy: {
         type: Number,
         required: true,

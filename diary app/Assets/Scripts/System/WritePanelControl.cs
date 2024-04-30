@@ -27,32 +27,26 @@ public class WritePanelControl : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI StatOfTheDay;
 
-    private void Start()
-    {
-        // Initialize();
-    }
+    DateTime today;
 
+
+    
     public void Init(){
-        date.text= DateTime.Now.ToString("yyyy.MM.dd");
+        today = DateTime.Now;
+        date.text= today.ToString("yyyy.MM.dd");
         ReadDiary();
     }
     private void ReadDiary(){
         if(GameManager.i.GetUser() != null){
-            Debug.Log("다이어리 읽기 시도");;
-
-            Backend.i.ReadDiary(GameManager.i.GetUser().GetId(), DateTime.Now.ToString("yyyyMMdd"), OnReadDiarySuccess);
+            Backend.i.ReadDiary(today.ToString("yyyyMMdd"), OnReadDiarySuccess);
         }
     }
 
     public void OnReadDiarySuccess(Diary diary){
+        Debug.Log("Success to read diary");
         if(diary != null){
-            Debug.Log("다이어리 읽기 성공");;
-            SetDiaryOfTheDay(diary.text);
-            diary.InitDiaryResult();
-            SetResultPanel(diary.diaryResult);
-            resultPanel.SetActive(true);
-            initialPanel.SetActive(false);
-            GameManager.i.UpdateUser();
+            SetResultPanel(diary);
+            // GameManager.i.UpdateUser();
         }
     }
 
@@ -60,55 +54,60 @@ public class WritePanelControl : MonoBehaviour
         if (GameManager.i.GetUser() != null && diaryInput.text != "") {
             string content = diaryInput.text;
             content = content.Replace('\n',' ');
-            SetDiaryOfTheDay(content);
-            Backend.i.CreateDiary(GameManager.i.GetUser().GetId(), content, OnSubmitSuccess);
+
+            LoadingWindow.i.StartLoading();
+            Backend.i.CreateDiary(content, OnSubmitSuccess);
         }
     }
 
-    public void OnSubmitSuccess(DiaryResult result){
+    public void OnSubmitSuccess(Diary diary){
         initialPanel.SetActive(false);
-        SetResultPanel(result);
-        resultPanel.SetActive(true);
+        SetResultPanel(diary);
         GameManager.i.UpdateUser();
         
-        LoadingWindow.i.EndLoading(1f,()=>{});
-        
+        LoadingWindow.i.EndLoading(0f,()=>{});
     }
 
-    public void SetDiaryOfTheDay(string content){
-        diaryOfTheDay.text = content;
+    public void SetResultPanel(Diary diary){
+        Debug.Log("Set diary result panel");
+        diaryOfTheDay.text = diary.text;
+        SetAnalysis(diary.analysis);
+
+        resultPanel.SetActive(true);
+        initialPanel.SetActive(false);
     }
 
-    public void SetResultPanel(DiaryResult result){
-        if(result != null){
+    public void SetAnalysis(DiaryAnalysis analysis){
+        if(analysis != null){
             StatOfTheDay.text = "오늘 하루는 \n";
-            if(result.neutral == 1.0){
-                StatOfTheDay.text = "무난했어요! \n";
-                return;
+            if(analysis.joy > 0.01){
+                StatOfTheDay.text += string.Format("<color={0}>행복</color>이 <color={1}>{2} 포인트</color>\n", MyColor.joy, MyColor.joy, Math.Round(analysis.joy*100,0));
             }
-            if(result.happiness > 0){
-                
-                StatOfTheDay.text += string.Format("<color={0}>행복</color>이 <color={1}>{2} 포인트</color>\n", MyColor.happiness, MyColor.happiness, Math.Round(result.happiness*100,0));
-            }
-            if(result.sadness > 0){
-                StatOfTheDay.text +=  string.Format("<color={0}>슬픔</color>이 <color={1}>{2} 포인트</color>\n", MyColor.sadness,MyColor.sadness, Math.Round(result.sadness*100,0));
+            if(analysis.sadness > 0.01){
+                StatOfTheDay.text +=  string.Format("<color={0}>슬픔</color>이 <color={1}>{2} 포인트</color>\n", MyColor.sadness,MyColor.sadness, Math.Round(analysis.sadness*100,0));
 
             }
-            if(result.angry > 0){
-                StatOfTheDay.text +=  string.Format("<color={0}>분노</color>가 <color={1}>{2} 포인트</color>\n", MyColor.angry,MyColor.angry, Math.Round(result.angry*100,0));
+            if(analysis.angry > 0.01){
+                StatOfTheDay.text +=  string.Format("<color={0}>분노</color>가 <color={1}>{2} 포인트</color>\n", MyColor.angry,MyColor.angry, Math.Round(analysis.angry*100,0));
 
             }
-            if(result.disgust > 0){
-                StatOfTheDay.text +=  string.Format("<color={0}>혐오</color>가 <color={1}>{2} 포인트</color>\n", MyColor.disgust,MyColor.disgust, Math.Round(result.disgust*100,0));
+            if(analysis.disgust > 0.01){
+                StatOfTheDay.text +=  string.Format("<color={0}>혐오</color>가 <color={1}>{2} 포인트</color>\n", MyColor.disgust,MyColor.disgust, Math.Round(analysis.disgust*100,0));
 
             }
-            if(result.surprise > 0){
-                StatOfTheDay.text +=  string.Format("<color={0}>놀람</color>이 <color={1}>{2} 포인트</color>\n",MyColor.surprise, MyColor.surprise, Math.Round(result.surprise*100,0));
+            if(analysis.surprise > 0.01){
+                StatOfTheDay.text +=  string.Format("<color={0}>놀람</color>이 <color={1}>{2} 포인트</color>\n",MyColor.surprise, MyColor.surprise, Math.Round(analysis.surprise*100,0));
             }
-            if(result.fear > 0){
-                StatOfTheDay.text +=  string.Format("<color={0}>공포</color>가 <color={1}>{2} 포인트</color>\n", MyColor.fear, MyColor.fear, Math.Round(result.fear*100,0));
+            if(analysis.fear > 0.01){
+                StatOfTheDay.text +=  string.Format("<color={0}>공포</color>가 <color={1}>{2} 포인트</color>\n", MyColor.fear, MyColor.fear, Math.Round(analysis.fear*100,0));
             }
-            StatOfTheDay.text += "만큼 있었네요!";
+
+            if(StatOfTheDay.text == "오늘 하루는 \n"){
+                StatOfTheDay.text += "무난했어요!";
+            }
+            else{
+                StatOfTheDay.text += "만큼 있었네요!";
+            } 
         }
     }
 }

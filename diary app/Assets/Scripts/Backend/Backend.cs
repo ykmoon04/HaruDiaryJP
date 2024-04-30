@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using System.Runtime.CompilerServices;
 
 public class Backend : MonoBehaviour
 {
@@ -26,7 +27,6 @@ public class Backend : MonoBehaviour
     private void Awake() {
         if(i==null) i=this;
         DontDestroyOnLoad(gameObject);
-
     }
 
     string BuildUrl(Resource resource, Action action) {
@@ -43,19 +43,9 @@ public class Backend : MonoBehaviour
 
 
     // Create User
-    public void CreateUser(string id, string name, Action<User> onSuccess) {
+    public void CreateUser(string nickname, Action<User> onSuccess) {
         Dictionary<string, string> data = new Dictionary<string, string>();
-        data.Add("user_id",id);
-        // data.Add("password", password);
-        data.Add("nickname", name);
-
-        string url = BuildUrl(Resource.Users, Action.Create);
-        HttpRequest.i.Post<User>(url,DictToJson(data), onSuccess, AlertOnFailed);
-    }
-
-    public void CreateUser(string name, Action<User> onSuccess) {
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data.Add("nickname", name);
+        data.Add("nickname", nickname);
 
         string url = BuildUrl(Resource.Users, Action.Create);
         HttpRequest.i.Post<User>(url,DictToJson(data), onSuccess, AlertOnFailed);
@@ -71,26 +61,14 @@ public class Backend : MonoBehaviour
 
 
     // Read diary
-    public void ReadDiary(string id, string targetDate, Action<Diary> onSuccess){
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data.Add("user_id",GameManager.i.GetUser().GetId());
-        data.Add("date", targetDate);
-
-        /*
-
-        string url = BuildUrl(Resource.Diaries, Action.Read);
-        HttpRequest.i.Post<Diary>(url,DictToJson(data), onSuccess, AlertOnFailed);
-
-        HttpRequest.i.Post<Diary>(url+SubUrl.diary_read.ToString(), DictToJson(data), onSuccess, OnFailed);
-
-        */
+    public void ReadDiary(string targetDate, Action<Diary> onSuccess){
+        string url = BuildUrl(Resource.Diaries, $"{GameManager.i.GetUser().GetId()}/{targetDate}");
+        HttpRequest.i.Get<Diary>(url,onSuccess, AlertOnFailed);
     }
 
-    public void ReadDiary(string id, string targetDate, Action<Diary> onSuccess, Action<string> onFailed){
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data.Add("user_id",GameManager.i.GetUser().GetId());
-        data.Add("date", targetDate);
-
+    public void ReadDiary(string targetDate, Action<Diary> onSuccess, Action<string> onFailed){
+        string url = BuildUrl(Resource.Diaries, $"{GameManager.i.GetUser().GetId()}/{targetDate}");
+        HttpRequest.i.Get<Diary>(url,onSuccess, AlertOnFailed);
         /*
 
         string url = BuildUrl(Resource.Diaries, Action.Read);
@@ -102,16 +80,15 @@ public class Backend : MonoBehaviour
     }
 
     
-    // \n -> \n\n으로 변환하는 거는 호출부에서
-    public void CreateDiary(string id, string text, Action<DiaryResult> onSuccess){
+
+    public void CreateDiary(string text, Action<Diary> onSuccess){
         Dictionary<string, string> data = new Dictionary<string, string>();
         data.Add("user_id",GameManager.i.GetUser().GetId());
         data.Add("text", text);
-
-        LoadingWindow.i.StartLoading();
+        data.Add("date", DateTime.Now.ToString("yyyyMMdd"));
 
         string url = BuildUrl(Resource.Diaries,Action.Create);
-        HttpRequest.i.Post<DiaryResult>(url, DictToJson(data), onSuccess, AlertOnFailed);
+        HttpRequest.i.Post<Diary>(url, DictToJson(data), onSuccess, AlertOnFailed);
     }
 
 

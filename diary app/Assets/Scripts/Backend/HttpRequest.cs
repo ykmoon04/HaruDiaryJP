@@ -29,6 +29,8 @@ public class HttpRequest : MonoBehaviour
                 onFailed?.Invoke(request.error);
             }
             else{
+                Debug.Log(request.downloadHandler.text);
+
                 T res = JsonUtility.FromJson<T>(request.downloadHandler.text);
                 if (request.responseCode == 200){
                     onSuccess?.Invoke(res);

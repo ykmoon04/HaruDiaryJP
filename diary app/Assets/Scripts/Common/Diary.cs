@@ -5,15 +5,12 @@ using UnityEngine;
 [System.Serializable]
 public class Diary
 {
-    public string id;    
-    public string text;
-    public string targetDate;
-    public double happiness, sadness, disgust, angry, surprise, fear, neutral;
-    public DiaryResult diaryResult;
-    public void InitDiaryResult(){
-        diaryResult = new DiaryResult(this.happiness, this.sadness, this.disgust, this.angry, this.surprise, this.fear, this.neutral);
-    }
+    public DiaryAnalysis analysis;
 
+    public string user_id;    
+    public string text;
+    public string date;
+    
     public bool hasText(){
         if(text == null || text == ""){
             return false;
@@ -22,8 +19,26 @@ public class Diary
     }
 
     public Emotions GetMaxEmotionType(){
-        Emotions res = Emotions.happiness;
-        double maxVal = happiness;
+        return analysis.GetMaxEmotionType();
+    }
+}
+
+[System.Serializable]
+public class DiaryAnalysis{
+    public double joy,sadness,angry,fear, surprise,disgust;
+    public DiaryAnalysis(){}
+    public DiaryAnalysis(double joy, double sadness, double disgust, double angry, double surprise, double fear){
+        this.joy = joy;
+        this.sadness = sadness;
+        this.disgust = disgust;
+        this.angry = angry;
+        this.surprise = surprise;
+        this.fear = fear;
+    }
+
+    public Emotions GetMaxEmotionType(){
+        Emotions res = Emotions.joy;
+        double maxVal = joy;
 
         if(sadness > maxVal){
             maxVal=sadness;
@@ -54,19 +69,6 @@ public class Diary
 
         return res;
     }
-}
 
-[System.Serializable]
-public class DiaryResult{
-    public double happiness, sadness, disgust, angry, surprise, fear, neutral;
-    public DiaryResult(){}
-    public DiaryResult(double happiness, double sadness, double disgust, double angry, double surprise, double fear, double neutral){
-        this.happiness = happiness;
-        this.sadness = sadness;
-        this.disgust = disgust;
-        this.angry = angry;
-        this.surprise = surprise;
-        this.fear = fear;
-        this.neutral = neutral;
-    }
+
 }

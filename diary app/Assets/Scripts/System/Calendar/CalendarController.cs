@@ -25,7 +25,6 @@ public class CalendarController : MonoBehaviour
     }
 
     public void Init(){
-        
         _calendarInstance = this;
         Vector3 startPos = _item.transform.localPosition;
         _dateItems.Clear();
@@ -46,8 +45,6 @@ public class CalendarController : MonoBehaviour
         _dateTime = DateTime.Now;
 
         CreateCalendar();
-
-        // _calendarPanel.SetActive(true);
     }
 
     public void ReloadPanel(){
@@ -79,7 +76,7 @@ public class CalendarController : MonoBehaviour
 
                     string targetDate = String.Format("{0}{1:D2}{2:D2}",thatDay.Year, thatDay.Month, date+1);
                     if(GameManager.i.GetUser() != null){
-                        Backend.i.ReadDiary(GameManager.i.GetUser().GetId(), targetDate, (res)=>{
+                        Backend.i.ReadDiary( targetDate, (res)=>{
                             // Debug.Log(targetDate);
                             if(!res.hasText()){
                                 return;
@@ -93,8 +90,8 @@ public class CalendarController : MonoBehaviour
                             checkImg.enabled=true;
                             
                             switch(em){
-                                case Emotions.happiness:
-                                     ColorUtility.TryParseHtmlString(MyColor.happiness, out color);
+                                case Emotions.joy:
+                                     ColorUtility.TryParseHtmlString(MyColor.joy, out color);
                                     checkImg.color = color;
                                 break;
                                 case Emotions.sadness:

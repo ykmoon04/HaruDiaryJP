@@ -24,8 +24,9 @@ public class InitializeScript : MonoBehaviour
         {
             btn.onClick.AddListener(()=>{
                 popup.SetActive(false);
-
+                LoadingWindow.i.StartLoading();
                 Backend.i.CreateUser(inputField.text,(user)=>{
+
                     SaveToken(user.GetId());
                     GameManager.i.SetUser(user);
                     LoadSceneManager.i.ToMain();    
@@ -41,15 +42,7 @@ public class InitializeScript : MonoBehaviour
     public void AutoLogin(string id){
        Backend.i?.ReadUser(id, (user)=>{
             GameManager.i.SetUser(user);
-            LoadSceneManager.i.ToMain();
-            /*
-            Backend.i?.ReadAllObjects(GameManager.i.GetUser().GetId(),(treeList)=>{
-
-                // if(treeList != null) GameManager.i.SetTreeList(treeList);
-                LoadSceneManager.i.ToMain();
-            });
-            */
-            
+            LoadSceneManager.i.ToMain(); 
         }); 
     }
 

@@ -5,9 +5,11 @@ const router = express.Router();
 const {
   getDiaries,
   createDiary,
+  getDiary,
 } = require('../controllers/diary.controller.js');
 
 router.get('/:id', getDiaries);
-router.post('/', createDiary);
+router.get('/:id/:date', getDiary);
+router.post('/create', createDiary);
 
 module.exports = router;
