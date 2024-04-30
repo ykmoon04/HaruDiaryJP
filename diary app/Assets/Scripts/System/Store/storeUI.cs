@@ -45,7 +45,6 @@ public class storeUI : MonoBehaviour
         panels = scrollView.transform.GetChild(0).GetComponentsInChildren<Transform>(true).ToList();
         panels.RemoveAt(0);
 
-        Debug.Log(panels.Count);
         btns = tabs.transform.GetComponentsInChildren<Image>(true).ToList();
        
         originalScale = itemBox.transform.localScale;
@@ -58,9 +57,9 @@ public class storeUI : MonoBehaviour
             SetStore(e);
         }
 
-        SetResourcePanel((int)Emotions.happiness);
-        curActivePanel = panels[(int)Emotions.happiness].gameObject;
-        curActiveIdx = (int)Emotions.happiness;
+        SetResourcePanel((int)Emotions.joy);
+        curActivePanel = panels[(int)Emotions.joy].gameObject;
+        curActiveIdx = (int)Emotions.joy;
         
     }
 
@@ -103,7 +102,6 @@ public class storeUI : MonoBehaviour
     }
 
     public void SetResourcePanel(int target){
-        Debug.Log(target + "리소스 업데이트");
             Image icon = resources.transform.GetChild(0).GetComponent<Image>();
             icon.sprite = resourceIcon;
             
@@ -131,10 +129,10 @@ public class storeUI : MonoBehaviour
     }
 
     public void OnHappyBtnClick(){
-        ActivatePanel((int)Emotions.happiness);
-        ActivateBtn((int)Emotions.happiness);
+        ActivatePanel((int)Emotions.joy);
+        ActivateBtn((int)Emotions.joy);
 
-        curActiveIdx = (int)Emotions.happiness;
+        curActiveIdx = (int)Emotions.joy;
     }
 
     public void OnSadBtnClick(){
@@ -264,7 +262,7 @@ public class ItemInfoList{
 
     public void Init(){
         data = new Dictionary<Emotions, List<ItemInfo>>();
-        data.Add(Emotions.happiness, happiness);
+        data.Add(Emotions.joy, happiness);
         data.Add(Emotions.sadness, sadness);
         data.Add(Emotions.angry, angry);
         data.Add(Emotions.fear, fear);

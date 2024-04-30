@@ -3,12 +3,12 @@ using System;
 [System.Serializable]
 public class User {
     public string _id;
-    public string name;
+    public string nickname;
     
     public Points points;
     
     public string GetId() => _id;
-    public string GetName() => name;
+    public string GetName() => nickname;
     
     public void SetPoint(){
          
@@ -16,7 +16,7 @@ public class User {
 
     public int getPoint(Emotions em){
         switch(em){
-            case Emotions.happiness:
+            case Emotions.joy:
                 return points.joy;
             case Emotions.sadness:
                 return points.sadness;
