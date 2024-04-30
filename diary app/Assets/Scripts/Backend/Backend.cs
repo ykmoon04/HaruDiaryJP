@@ -68,15 +68,7 @@ public class Backend : MonoBehaviour
 
     public void ReadDiary(string targetDate, Action<Diary> onSuccess, Action<string> onFailed){
         string url = BuildUrl(Resource.Diaries, $"{GameManager.i.GetUser().GetId()}/{targetDate}");
-        HttpRequest.i.Get<Diary>(url,onSuccess, AlertOnFailed);
-        /*
-
-        string url = BuildUrl(Resource.Diaries, Action.Read);
-        HttpRequest.i.Post<Diary>(url,DictToJson(data), onSuccess, AlertOnFailed);
-
-        HttpRequest.i.Post<Diary>(url+SubUrl.diary_read.ToString(), DictToJson(data), onSuccess, OnFailed);
-
-        */
+        HttpRequest.i.Get<Diary>(url,onSuccess, onFailed);
     }
 
     

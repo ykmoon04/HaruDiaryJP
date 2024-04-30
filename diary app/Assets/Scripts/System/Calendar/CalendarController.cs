@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,9 +20,9 @@ public class CalendarController : MonoBehaviour
     private DateTime _dateTime;
     public static CalendarController _calendarInstance;
 
-    void Start()
-    {
 
+    private void OnEnable() {
+        ReloadPanel();
     }
 
     public void Init(){
@@ -48,6 +49,7 @@ public class CalendarController : MonoBehaviour
     }
 
     public void ReloadPanel(){
+        _dateTime = DateTime.Now;
         CreateCalendar();
     }
 
@@ -62,7 +64,6 @@ public class CalendarController : MonoBehaviour
         {
             Text label = _dateItems[i].GetComponentInChildren<Text>();
             Image checkImg = _dateItems[i].GetComponentsInChildren<Image>(true)[1];
-            // _dateItems[i].SetActive(false);
 
             if (i >= index && i < index + lastDay)
             {
@@ -77,7 +78,6 @@ public class CalendarController : MonoBehaviour
                     string targetDate = String.Format("{0}{1:D2}{2:D2}",thatDay.Year, thatDay.Month, date+1);
                     if(GameManager.i.GetUser() != null){
                         Backend.i.ReadDiary( targetDate, (res)=>{
-                            // Debug.Log(targetDate);
                             if(!res.hasText()){
                                 return;
                             }
@@ -86,7 +86,6 @@ public class CalendarController : MonoBehaviour
                             Debug.Log(String.Format("targetDate : {0} [{1}] {2}", targetDate,res.text, em.ToString()));
                             Color color;
 
-                            // _dateItems[i].transform.GetChild(1).gameObject.SetActive(true);
                             checkImg.enabled=true;
                             
                             switch(em){
@@ -133,6 +132,7 @@ public class CalendarController : MonoBehaviour
         }
         _yearNumText.text = _dateTime.Year.ToString()+"년";
         _monthNumText.text = _dateTime.Month.ToString()+"월";
+
     }
 
     int GetDays(DayOfWeek day)
