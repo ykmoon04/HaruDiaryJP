@@ -19,7 +19,7 @@ public class Diary
         return true;
     }
 
-    public Emotions GetMaxEmotionType(){
+    public Emotion GetMaxEmotionType(){
         return analysis.GetMaxEmotionType();
     }
 }
@@ -29,23 +29,23 @@ public class DiaryAnalysis : IEnumerable
 {
     public double joy,sadness,angry,fear, surprise,disgust;
 
-    Dictionary<Emotions, double> emotions;
+    Dictionary<Emotion, double> emotions;
     
     void InitEmotions(){
         if(emotions==null){
-            emotions = new Dictionary<Emotions, double>
+            emotions = new Dictionary<Emotion, double>
                     {
-                        { Emotions.joy, joy },
-                        { Emotions.sadness, sadness },
-                        { Emotions.disgust, disgust },
-                        { Emotions.angry, angry },
-                        { Emotions.surprise, surprise },
-                        { Emotions.fear, fear }
+                        { Emotion.Joy, joy },
+                        { Emotion.Sadness, sadness },
+                        { Emotion.Disgust, disgust },
+                        { Emotion.Angry, angry },
+                        { Emotion.Surprise, surprise },
+                        { Emotion.Fear, fear }
                     };
         }
     }
 
-    public Emotions GetMaxEmotionType(){
+    public Emotion GetMaxEmotionType(){
         if(emotions==null){ InitEmotions();}
         return emotions.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
     }

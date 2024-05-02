@@ -59,8 +59,7 @@ public class CalendarController : MonoBehaviour
         DateTime firstDay = _dateTime.AddDays(-(_dateTime.Day - 1));
         int index = GetDays(firstDay.DayOfWeek);
         int lastDay = DateTime.DaysInMonth(_dateTime.Year, _dateTime.Month);
-Debug.Log(index);
-        Debug.Log(lastDay);
+
         if(index+lastDay>35) {
             background.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1290);}
         else background.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1125);
@@ -88,34 +87,34 @@ Debug.Log(index);
                                 return;
                             }
 
-                            Emotions em = res.GetMaxEmotionType();
+                            Emotion em = res.GetMaxEmotionType();
                             Debug.Log(String.Format("targetDate : {0} [{1}] {2}", targetDate,res.text, em.ToString()));
                             Color color;
 
                             checkImg.enabled=true;
                             
                             switch(em){
-                                case Emotions.joy:
+                                case Emotion.Joy:
                                      ColorUtility.TryParseHtmlString(MyColor.joy, out color);
                                     checkImg.color = color;
                                 break;
-                                case Emotions.sadness:
+                                case Emotion.Sadness:
                                    ColorUtility.TryParseHtmlString(MyColor.sadness, out color);
                                     checkImg.color = color;
                                 break;
-                                case Emotions.disgust:
+                                case Emotion.Disgust:
                                     ColorUtility.TryParseHtmlString(MyColor.disgust, out color);
                                     checkImg.color = color;                                
                                 break;
-                                case Emotions.angry:
+                                case Emotion.Angry:
                                     ColorUtility.TryParseHtmlString(MyColor.angry, out color);
                                     checkImg.color = color;                                
                                     break;
-                                case Emotions.surprise:
+                                case Emotion.Surprise:
                                     ColorUtility.TryParseHtmlString(MyColor.surprise, out color);
                                     checkImg.color = color;                                
                                     break;
-                                case Emotions.fear:
+                                case Emotion.Fear:
                                     ColorUtility.TryParseHtmlString(MyColor.fear, out color);
                                     checkImg.color = color;                               
                                      break;

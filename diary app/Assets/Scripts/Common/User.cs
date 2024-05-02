@@ -13,95 +13,83 @@ public class User {
     
 
     public void UpdatePoints(DiaryAnalysis analysis) {
-        points.joy = (int) (analysis.joy * 100);
-        points.sadness = (int) (analysis.sadness * 100);
-        points.disgust = (int) (analysis.disgust * 100);
-        points.angry = (int) (analysis.angry * 100);
-        points.surprise = (int) (analysis.surprise * 100);
-        points.fear = (int) (analysis.fear * 100);
+        points.joy += analysis.joy > 0.1 ? (int) Math.Round(analysis.joy * 100, 0) : 0;
+        points.sadness += analysis.sadness > 0.1 ? (int) Math.Round(analysis.sadness * 100, 0) : 0;
+        points.disgust += (int) analysis.disgust > 0.1 ? (int) Math.Round(analysis.disgust * 100, 0) : 0;
+        points.angry += analysis.angry > 0.1 ? (int) Math.Round(analysis.angry * 100, 0) : 0;
+        points.surprise += analysis.surprise > 0.1 ? (int) Math.Round(analysis.surprise * 100, 0) : 0;
+        points.fear += (int) analysis.fear > 0.1 ? (int) Math.Round(analysis.fear * 100, 0) : 0;
     }
 
-    public int getPoint(Emotions em){
-        switch(em){
-            case Emotions.joy:
+    public void UpdatePoints(Emotion emotion, int change) {
+        switch (emotion)
+        {
+            case Emotion.Joy:
+                points.joy += change;
+                break;
+            case Emotion.Sadness:
+                points.sadness += change;
+                break;
+            case Emotion.Angry:
+                points.angry += change;
+                break;
+            case Emotion.Fear:
+                points.fear += change;
+                break;
+            case Emotion.Surprise:
+                points.surprise += change;
+                break;
+            case Emotion.Disgust:
+                points.disgust += change;
+                break;
+        }
+    }
+
+    public int getPoint(Emotion emotion){
+        switch(emotion){
+            case Emotion.Joy:
                 return points.joy;
-            case Emotions.sadness:
+            case Emotion.Sadness:
                 return points.sadness;
-            case Emotions.angry:
+            case Emotion.Angry:
                 return points.angry;
-            case Emotions.fear:
+            case Emotion.Fear:
                 return points.fear;
-            case Emotions.surprise:
+            case Emotion.Surprise:
                 return points.surprise;
-            case Emotions.disgust:
+            case Emotion.Disgust:
                 return points.disgust;
         }
 
         return -1;
     }
 
-    public void SetPoints(DiaryAnalysis analysis){
-        points.joy = (int) analysis.joy * 100;
-        points.sadness = (int) analysis.sadness * 100;
-        points.disgust = (int) analysis.disgust * 100;
-        points.angry = (int) analysis.angry * 100;
-        points.surprise = (int) analysis.surprise * 100;
-        points.fear = (int) analysis.fear * 100;
+  
 
-    }
 
-    public int getPoint(string em){
-        /*
-        switch(em){
-            case "happiness":
-                return happinessPt;
-            case "sadness":
-                return sadnessPt;
-            case "angry":
-                return angryPt;
-            case "fear":
-                return fearPt;
-            case "surprise":
-                return surprisePt;
-            case "disgust":
-                return disgustPt;
-        }
-        */
-
-        return -1;
-    }
-
-    
-    public int setPoint(string em, int money){
-
-        return -1;
-    }
-    
-    public int setPoint(Emotions em, int money){
-        /*
-        switch(em){
-            case Emotions.happiness:
-               this.happinessmoney = money;
-               break;
-            case Emotions.sadness:
-                this.sadnessmoney = money;
+    public void setPoint(Emotion emotion, int value){
+        
+        switch(emotion){
+            case Emotion.Joy:
+                points.joy = value;
                 break;
-            case Emotions.angry:
-                this.angrymoney = money;
+            case Emotion.Sadness:
+                points.sadness = value;
                 break;
-            case Emotions.fear:
-                this.fearmoney = money;
+            case Emotion.Angry:
+                points.angry = value;
                 break;
-            case Emotions.surprise:
-                this.surprisemoney = money;
+            case Emotion.Fear:
+                points.fear = value;
                 break;
-            case Emotions.disgust:
-                this.disgustmoney = money;
+            case Emotion.Surprise:
+                points.surprise = value;
+                break;
+            case Emotion.Disgust:
+                points.disgust = value;
                 break;
         }
-        */
 
-        return -1;
     }
 
 
@@ -114,5 +102,5 @@ public class User {
 
 [System.Serializable]
 public class Points {
-    public int joy,sadness,angry,fear, surprise,disgust;
+    public int joy,sadness,angry,fear, surprise,disgust; 
 }

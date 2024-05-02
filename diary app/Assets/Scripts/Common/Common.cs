@@ -15,19 +15,19 @@ public class MyColor{
     public static string angry = "#DE3745";
     public static string fear = "#CCA2DE";
 
-    public static string getColor(Emotions e){
+    public static string getColor(Emotion e){
         switch(e){
-            case Emotions.joy:
+            case Emotion.Joy:
                 return joy;
-            case Emotions.sadness:
+            case Emotion.Sadness:
                 return sadness;
-            case Emotions.angry:
+            case Emotion.Angry:
                 return angry;
-            case Emotions.fear:
+            case Emotion.Fear:
                 return fear;
-            case Emotions.surprise:
+            case Emotion.Surprise:
                 return surprise;
-            case Emotions.disgust:
+            case Emotion.Disgust:
                 return disgust;
         }
 
@@ -35,11 +35,11 @@ public class MyColor{
     }
 }
 
-public enum Emotions{
-    joy = 0,
-    sadness = 1,
-    angry = 2,
-    fear = 3,
-    surprise = 4,
-    disgust = 5
+public enum Emotion{
+    Joy = 0,
+    Sadness = 1,
+    Angry = 2,
+    Fear = 3,
+    Surprise = 4,
+    Disgust = 5
 }

@@ -53,18 +53,18 @@ public class storeUI : MonoBehaviour
         itemList = JsonUtility.FromJson<ItemInfoList>(jsonData.ToString());
         itemList.Init();
 
-        foreach(Emotions e in Enum.GetValues(typeof(Emotions))){
+        foreach(Emotion e in Enum.GetValues(typeof(Emotion))){
             SetStore(e);
         }
 
-        SetResourcePanel((int)Emotions.joy);
-        curActivePanel = panels[(int)Emotions.joy].gameObject;
-        curActiveIdx = (int)Emotions.joy;
+        SetResourcePanel((int)Emotion.Joy);
+        curActivePanel = panels[(int)Emotion.Joy].gameObject;
+        curActiveIdx = (int)Emotion.Joy;
         
     }
 
     public void ReloadStore(){
-        foreach(Emotions e in Enum.GetValues(typeof(Emotions))){
+        foreach(Emotion e in Enum.GetValues(typeof(Emotion))){
             SetStore(e);
             
         }
@@ -106,11 +106,11 @@ public class storeUI : MonoBehaviour
             icon.sprite = resourceIcon;
             
             Color color;
-            ColorUtility.TryParseHtmlString(MyColor.getColor((Emotions)target), out color); 
+            ColorUtility.TryParseHtmlString(MyColor.getColor((Emotion)target), out color); 
             icon.color = color;
 
             if( GameManager.i.GetUser()!=null){
-                resources.GetComponentInChildren<Text>().text = GameManager.i.GetUser().getPoint((Emotions)target).ToString();
+                resources.GetComponentInChildren<Text>().text = GameManager.i.GetUser().getPoint((Emotion)target).ToString();
             }
     }
 
@@ -129,50 +129,50 @@ public class storeUI : MonoBehaviour
     }
 
     public void OnHappyBtnClick(){
-        ActivatePanel((int)Emotions.joy);
-        ActivateBtn((int)Emotions.joy);
+        ActivatePanel((int)Emotion.Joy);
+        ActivateBtn((int)Emotion.Joy);
 
-        curActiveIdx = (int)Emotions.joy;
+        curActiveIdx = (int)Emotion.Joy;
     }
 
     public void OnSadBtnClick(){
-        ActivatePanel((int)Emotions.sadness);
-        ActivateBtn((int)Emotions.sadness);
+        ActivatePanel((int)Emotion.Sadness);
+        ActivateBtn((int)Emotion.Sadness);
 
-        curActiveIdx = (int)Emotions.sadness;
+        curActiveIdx = (int)Emotion.Sadness;
     }
 
     public void OnAngryBtnClick(){
-        ActivatePanel((int)Emotions.angry);
-        ActivateBtn((int)Emotions.angry);
+        ActivatePanel((int)Emotion.Angry);
+        ActivateBtn((int)Emotion.Angry);
         
-        curActiveIdx = (int)Emotions.angry;
+        curActiveIdx = (int)Emotion.Angry;
     }
 
     public void OnDisgustBtnClick(){
-        ActivatePanel((int)Emotions.disgust);
-        ActivateBtn((int)Emotions.disgust);
+        ActivatePanel((int)Emotion.Disgust);
+        ActivateBtn((int)Emotion.Disgust);
         
-        curActiveIdx = (int)Emotions.disgust;
+        curActiveIdx = (int)Emotion.Disgust;
     }
 
     public void OnFearBtnClick(){
-        ActivatePanel((int)Emotions.fear);
-        ActivateBtn((int)Emotions.fear);
+        ActivatePanel((int)Emotion.Fear);
+        ActivateBtn((int)Emotion.Fear);
         
-        curActiveIdx = (int)Emotions.fear;
+        curActiveIdx = (int)Emotion.Fear;
     }
 
     public void OnSurpriseBtnClick(){
-        ActivatePanel((int)Emotions.surprise);
-        ActivateBtn((int)Emotions.surprise);
+        ActivatePanel((int)Emotion.Surprise);
+        ActivateBtn((int)Emotion.Surprise);
         
-        curActiveIdx = (int)Emotions.surprise;
+        curActiveIdx = (int)Emotion.Surprise;
     }
 
 
 
-    public void SetStore(Emotions e){
+    public void SetStore(Emotion e){
         int pt = GameManager.i.GetUser().getPoint(e);
         SetResourcePanel((int)e);
         if(itemList.data[e] != null){
@@ -211,14 +211,14 @@ public class storeUI : MonoBehaviour
     }
     public void UpdateStore(){
         Debug.Log("상점을 업데이트");
-        foreach(Emotions e in Enum.GetValues(typeof(Emotions))){
+        foreach(Emotion e in Enum.GetValues(typeof(Emotion))){
             UpdateStore(e);
         }
         SetResourcePanel(curActiveIdx);
 
     }
 
-    public void UpdateStore(Emotions e){
+    public void UpdateStore(Emotion e){
         int pt = GameManager.i.GetUser().getPoint(e);
         Button[] btns = panels[(int)e].GetComponentsInChildren<Button>();
         foreach(Button btn in btns){
@@ -258,15 +258,15 @@ public class ItemInfoList{
     [SerializeField]
     private List<ItemInfo> disgust;
 
-    public Dictionary<Emotions, List<ItemInfo>> data;
+    public Dictionary<Emotion, List<ItemInfo>> data;
 
     public void Init(){
-        data = new Dictionary<Emotions, List<ItemInfo>>();
-        data.Add(Emotions.joy, happiness);
-        data.Add(Emotions.sadness, sadness);
-        data.Add(Emotions.angry, angry);
-        data.Add(Emotions.fear, fear);
-        data.Add(Emotions.surprise, surprise);
-        data.Add(Emotions.disgust, disgust);
+        data = new Dictionary<Emotion, List<ItemInfo>>();
+        data.Add(Emotion.Joy, happiness);
+        data.Add(Emotion.Sadness, sadness);
+        data.Add(Emotion.Angry, angry);
+        data.Add(Emotion.Fear, fear);
+        data.Add(Emotion.Surprise, surprise);
+        data.Add(Emotion.Disgust, disgust);
     }
 }
