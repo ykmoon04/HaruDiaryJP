@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class CalendarController : MonoBehaviour
 {
-
+    public RectTransform background;
     public GameObject _calendarPanel;
     public Text _yearNumText;
     public Text _monthNumText;
@@ -55,9 +55,15 @@ public class CalendarController : MonoBehaviour
 
     void CreateCalendar()
     {
+        
         DateTime firstDay = _dateTime.AddDays(-(_dateTime.Day - 1));
         int index = GetDays(firstDay.DayOfWeek);
         int lastDay = DateTime.DaysInMonth(_dateTime.Year, _dateTime.Month);
+Debug.Log(index);
+        Debug.Log(lastDay);
+        if(index+lastDay>35) {
+            background.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1290);}
+        else background.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, 1125);
 
         int date = 0;
         for (int i = 0; i < _totalDateNum; i++)
@@ -130,6 +136,8 @@ public class CalendarController : MonoBehaviour
                 label.text = "";
             }
         }
+
+        
         _yearNumText.text = _dateTime.Year.ToString()+"년";
         _monthNumText.text = _dateTime.Month.ToString()+"월";
 
@@ -178,7 +186,7 @@ public class CalendarController : MonoBehaviour
     {
         _calendarPanel.SetActive(true);
         _target = target;
-        _calendarPanel.transform.position = new Vector3(965, 475, 0);//Input.mousePosition-new Vector3(0,120,0);
+        // _calendarPanel.transform.position = new Vector3(965, 475, 0);//Input.mousePosition-new Vector3(0,120,0);
     }
 
     Text _target;
