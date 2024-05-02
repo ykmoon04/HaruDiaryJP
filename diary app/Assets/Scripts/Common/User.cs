@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 [System.Serializable]
 public class User {
     public string _id;
@@ -10,8 +11,14 @@ public class User {
     public string GetId() => _id;
     public string GetName() => nickname;
     
-    public void SetPoint(){
-         
+
+    public void UpdatePoints(DiaryAnalysis analysis) {
+        points.joy = (int) (analysis.joy * 100);
+        points.sadness = (int) (analysis.sadness * 100);
+        points.disgust = (int) (analysis.disgust * 100);
+        points.angry = (int) (analysis.angry * 100);
+        points.surprise = (int) (analysis.surprise * 100);
+        points.fear = (int) (analysis.fear * 100);
     }
 
     public int getPoint(Emotions em){
@@ -31,6 +38,16 @@ public class User {
         }
 
         return -1;
+    }
+
+    public void SetPoints(DiaryAnalysis analysis){
+        points.joy = (int) analysis.joy * 100;
+        points.sadness = (int) analysis.sadness * 100;
+        points.disgust = (int) analysis.disgust * 100;
+        points.angry = (int) analysis.angry * 100;
+        points.surprise = (int) analysis.surprise * 100;
+        points.fear = (int) analysis.fear * 100;
+
     }
 
     public int getPoint(string em){
@@ -56,28 +73,6 @@ public class User {
 
     
     public int setPoint(string em, int money){
-        /*
-        switch(em){
-            case "happiness":
-                this.happinessmoney = money;
-               break;
-            case "sadness":
-                this.happinessmoney = money;
-               break;
-            case "angry":
-                this.happinessmoney = money;
-               break;
-            case "fear":
-                this.happinessmoney = money;
-               break;
-            case "surprise":
-                this.happinessmoney = money;
-               break;
-            case "disgust":
-                this.happinessmoney = money;
-               break;
-        }
-        */
 
         return -1;
     }
@@ -118,6 +113,6 @@ public class User {
 }
 
 [System.Serializable]
-public class Points{
+public class Points {
     public int joy,sadness,angry,fear, surprise,disgust;
 }

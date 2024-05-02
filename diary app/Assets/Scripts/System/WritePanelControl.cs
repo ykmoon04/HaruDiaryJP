@@ -30,7 +30,6 @@ public class WritePanelControl : MonoBehaviour
     DateTime today;
 
 
-    
     public void Init(){
         today = DateTime.Now;
         date.text= today.ToString("yyyy.MM.dd");
@@ -43,9 +42,8 @@ public class WritePanelControl : MonoBehaviour
     }
 
     public void OnReadDiarySuccess(Diary diary){
-        Debug.Log("Success to read diary");
         if(diary != null){
-            SetResultPanel(diary);
+            DisplayResult(diary);
             // GameManager.i.UpdateUser();
         }
     }
@@ -61,15 +59,17 @@ public class WritePanelControl : MonoBehaviour
     }
 
     public void OnSubmitSuccess(Diary diary){
-        initialPanel.SetActive(false);
-        SetResultPanel(diary);
-        GameManager.i.UpdateUser();
+        // user info update
+        GameManager.i.UpdateUser(diary.analysis);
         
+        // gui
+        initialPanel.SetActive(false);
+        DisplayResult(diary);    
+    
         LoadingWindow.i.EndLoading(0f,()=>{});
     }
 
-    public void SetResultPanel(Diary diary){
-        Debug.Log("Set diary result panel");
+    public void DisplayResult(Diary diary){
         diaryOfTheDay.text = diary.text;
         SetAnalysis(diary.analysis);
 
@@ -78,37 +78,31 @@ public class WritePanelControl : MonoBehaviour
     }
 
     public void SetAnalysis(DiaryAnalysis analysis){
-        if(analysis != null){
-            StatOfTheDay.text = "오늘 하루는 \n";
-            if(analysis.joy > 0.01){
-                StatOfTheDay.text += string.Format("<color={0}>행복</color>이 <color={1}>{2} 포인트</color>\n", MyColor.joy, MyColor.joy, Math.Round(analysis.joy*100,0));
-            }
-            if(analysis.sadness > 0.01){
-                StatOfTheDay.text +=  string.Format("<color={0}>슬픔</color>이 <color={1}>{2} 포인트</color>\n", MyColor.sadness,MyColor.sadness, Math.Round(analysis.sadness*100,0));
+        if (analysis == null) return;
 
-            }
-            if(analysis.angry > 0.01){
-                StatOfTheDay.text +=  string.Format("<color={0}>분노</color>가 <color={1}>{2} 포인트</color>\n", MyColor.angry,MyColor.angry, Math.Round(analysis.angry*100,0));
+        Dictionary<string, (double value, string color, string emotionName)> emotions = new Dictionary<string, (double, string, string)>
+        {
+            { "joy", (analysis.joy, MyColor.joy, "행복") },
+            { "sadness", (analysis.sadness, MyColor.sadness, "슬픔") },
+            { "angry", (analysis.angry, MyColor.angry, "분노") },
+            { "disgust", (analysis.disgust, MyColor.disgust, "혐오") },
+            { "surprise", (analysis.surprise, MyColor.surprise, "놀람") },
+            { "fear", (analysis.fear, MyColor.fear, "공포") }
+        };
 
-            }
-            if(analysis.disgust > 0.01){
-                StatOfTheDay.text +=  string.Format("<color={0}>혐오</color>가 <color={1}>{2} 포인트</color>\n", MyColor.disgust,MyColor.disgust, Math.Round(analysis.disgust*100,0));
+        string resultText = "오늘 하루는 \n";
 
+        bool anyEmotionSignificant = false;
+        foreach (var emotion in emotions) {
+            if (emotion.Value.value > 0.1) {
+                anyEmotionSignificant = true;
+                resultText += string.Format("<color={0}>{1}</color>이 <color={2}>{3} 포인트</color>\n",
+                    emotion.Value.color, emotion.Value.emotionName, emotion.Value.color, Math.Round(emotion.Value.value * 100, 0));
             }
-            if(analysis.surprise > 0.01){
-                StatOfTheDay.text +=  string.Format("<color={0}>놀람</color>이 <color={1}>{2} 포인트</color>\n",MyColor.surprise, MyColor.surprise, Math.Round(analysis.surprise*100,0));
-            }
-            if(analysis.fear > 0.01){
-                StatOfTheDay.text +=  string.Format("<color={0}>공포</color>가 <color={1}>{2} 포인트</color>\n", MyColor.fear, MyColor.fear, Math.Round(analysis.fear*100,0));
-            }
-
-            if(StatOfTheDay.text == "오늘 하루는 \n"){
-                StatOfTheDay.text += "무난했어요!";
-            }
-            else{
-                StatOfTheDay.text += "만큼 있었네요!";
-            } 
         }
+
+        resultText += anyEmotionSignificant ? "만큼 있었네요!" : "무난했어요!";
+        StatOfTheDay.text = resultText;
     }
 }
 

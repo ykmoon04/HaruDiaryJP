@@ -1,6 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
 
 [System.Serializable]
 public class Diary
@@ -24,50 +25,39 @@ public class Diary
 }
 
 [System.Serializable]
-public class DiaryAnalysis{
+public class DiaryAnalysis : IEnumerable
+{
     public double joy,sadness,angry,fear, surprise,disgust;
-    public DiaryAnalysis(){}
-    public DiaryAnalysis(double joy, double sadness, double disgust, double angry, double surprise, double fear){
-        this.joy = joy;
-        this.sadness = sadness;
-        this.disgust = disgust;
-        this.angry = angry;
-        this.surprise = surprise;
-        this.fear = fear;
+
+    Dictionary<Emotions, double> emotions;
+    
+    void InitEmotions(){
+        if(emotions==null){
+            emotions = new Dictionary<Emotions, double>
+                    {
+                        { Emotions.joy, joy },
+                        { Emotions.sadness, sadness },
+                        { Emotions.disgust, disgust },
+                        { Emotions.angry, angry },
+                        { Emotions.surprise, surprise },
+                        { Emotions.fear, fear }
+                    };
+        }
     }
 
     public Emotions GetMaxEmotionType(){
-        Emotions res = Emotions.joy;
-        double maxVal = joy;
+        if(emotions==null){ InitEmotions();}
+        return emotions.Aggregate((l, r) => l.Value > r.Value ? l : r).Key;
+    }
 
-        if(sadness > maxVal){
-            maxVal=sadness;
-            res = Emotions.sadness;
-        }
-        if(disgust > maxVal){
-            maxVal=disgust;
-            res = Emotions.disgust;
-        }
-
-
-        if(angry > maxVal){
-            maxVal=angry;
-            res = Emotions.angry;
-        }
-
-
-        if(surprise > maxVal){
-            maxVal=surprise;
-            res = Emotions.surprise;
-        }
-
-
-        if(fear > maxVal){
-            maxVal=fear;
-            res = Emotions.fear;
-        }
-
-        return res;
+    public IEnumerator GetEnumerator()
+    {
+        yield return joy;
+        yield return sadness;
+        yield return disgust;
+        yield return angry;
+        yield return surprise;
+        yield return fear;
     }
 
 

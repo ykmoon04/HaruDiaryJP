@@ -78,4 +78,40 @@ public class HttpRequest : MonoBehaviour
             }
         }
     }
+
+    public void Put<T>(string url, string jsonString, Action<T> onSuccess,  Action<string> onFailed)
+    {
+        StartCoroutine(UnityWebRequestPut(url, jsonString, onSuccess, onFailed));
+    }
+
+    // POST
+    private IEnumerator UnityWebRequestPut<T>(string url, string jsonString, Action<T> onSuccess, Action<string> onFailed)
+    {   
+        using (var request = new UnityWebRequest(url, "PUT")){
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonString);
+
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+            
+            yield return request.SendWebRequest();
+            
+            if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
+            {
+                onFailed?.Invoke(request.error);
+            }
+            else
+            {
+                T res = JsonUtility.FromJson<T>(request.downloadHandler.text);
+                if (request.responseCode == 200)
+                {
+                    onSuccess?.Invoke(res);
+                }
+                else
+                {
+                    onFailed?.Invoke(request.responseCode.ToString());
+                }
+            }
+        }
+    }
 }

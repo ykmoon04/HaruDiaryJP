@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System;
-using UnityEngine.SceneManagement;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -11,15 +8,15 @@ public class GameManager : MonoBehaviour
 
     TreeList treeList;
     int escCnt = 0;
+
     private void Awake() {
         if(i==null) i=this;
         escCnt = 0;
-        SetResolution();
+        // SetResolution();
         DontDestroyOnLoad(gameObject);
     }
 
     private void Update() {
-        
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             escCnt++;
@@ -51,13 +48,12 @@ public class GameManager : MonoBehaviour
     public User GetUser() => user;
     public void SetUser(User user){
         this.user = user;
-        user.SetPoint();
     }
 
     public void UpdateUser(){
         Debug.Log("유저 정보 업데이트 시작");
 
-/*
+        /*
         Backend.i.ReadUser(user.GetId(),user.GetPassword(), (newUser)=>{
             Debug.Log("유저 정보 업데이트 성공");
             user = newUser;
@@ -67,6 +63,17 @@ public class GameManager : MonoBehaviour
         });
         */
     }
+
+    public void UpdateUser(DiaryAnalysis analysis) {
+        if (user != null) {
+            Debug.Log("update user");
+            user.UpdatePoints(analysis);
+            Backend.i.UpdateUser((newUser)=>{
+                this.user = newUser;
+            });
+        }
+    }
+
 
     public void LogOut(){
         DataManager.i.DeleteGameData();

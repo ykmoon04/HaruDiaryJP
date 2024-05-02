@@ -59,6 +59,14 @@ public class Backend : MonoBehaviour
         HttpRequest.i.Get<User>(url, onSuccess, AlertOnFailed);
     }
 
+    // Update User
+    public void UpdateUser(Action<User> onSuccess){
+        User user = GameManager.i.GetUser();
+        Debug.Log(JsonUtility.ToJson(user));
+        string url = BuildUrl(Resource.Users, Action.Update, user.GetId());
+        HttpRequest.i.Put<User>(url, JsonUtility.ToJson(user), onSuccess, AlertOnFailed);
+    }
+
 
     // Read diary
     public void ReadDiary(string targetDate, Action<Diary> onSuccess){
