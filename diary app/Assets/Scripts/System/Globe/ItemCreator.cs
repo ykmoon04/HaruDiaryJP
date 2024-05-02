@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -50,7 +50,7 @@ public class ItemCreator : MonoBehaviour
             if(Physics.Raycast(ray, out hitObj, Mathf.Infinity))
             {
                 Debug.DrawRay(ray.origin, hitObj.point-ray.origin, Color.red, 5f);
-                ItemCreator.i.placeTree(hitObj.point);
+                CreateTree(hitObj.point);
             }
  
         }
@@ -68,46 +68,38 @@ public class ItemCreator : MonoBehaviour
         SetGlobeObjects(); 
         // zaxis = globe.transform.position - cam.transform.position;
     }
+
     public void SetGlobeObjects(){
             if(GameManager.i.getTreeList()!=null){
-                Debug.Log("지구 초기화");
-                Debug.Log(GameManager.i.getTreeList().tree_list);
-                foreach(Tree t in GameManager.i.getTreeList().tree_list){
-                    GameObject prefab = ItemManager.i.GetPrefab(t.treename);
-                    Debug.Log(t.treeid);
-                    Debug.Log(t.treename);
-                    Debug.Log(t.positionx);
-                    Debug.Log(prefab);
+                foreach(Tree t in GameManager.i.getTreeList().trees){
+                    GameObject prefab = ItemManager.i.GetPrefab(t.tree_name);
+                
                     if(prefab != null){
                         placeTree(prefab,t);
                     }
-                    
                 }
             }
         }
     
     public void SwitchPlaceMode(ItemInfo info){
-        // Debug.Log(obj.name + "을 샀어요 ");
-        
         SetItemInfo(info);
         Invoke("ToggleActive",0.5f);
     }
 
     public void placeTree(GameObject item,Tree t){
-        // pos += globe.transform.position;
         
         Vector3 originalScale = item.transform.localScale;
-        Vector3 pos = new Vector3((float)t.positionx, (float)t.positiony,(float)t.positionz);
+        Vector3 pos = new Vector3((float)t.position_x, (float)t.position_y,(float)t.position_z);
         Quaternion lookRotation = Quaternion.FromToRotation(Vector3.up, pos);
 
         GameObject clone = Instantiate(item, pos, lookRotation);   
         clone.transform.localScale = originalScale * 0.1f;
-        // Debug.Log(clone.transform.rotation);
+        
         clone.transform.parent = globe.transform;
         clone.transform.localPosition = pos;
     }
 
-    public void placeTree(Vector3 pos){
+    public void CreateTree(Vector3 pos){
             if(itemInfo != null){
                 // bounds = item.GetComponent<MeshFilter>().sharedMesh.bounds;
                 GameObject item = ItemManager.i.GetCollection(itemInfo.emotion).getPrefab(itemInfo.prefabName);
@@ -123,18 +115,13 @@ public class ItemCreator : MonoBehaviour
                 // Debug.Log(clone.transform.rotation);
                 clone.transform.parent = globe.transform;
 
-                Tree tree = new Tree();
-                tree.positionx = clone.transform.localPosition.x;
-                tree.positiony = clone.transform.localPosition.y;
-                tree.positionz = clone.transform.localPosition.z;
-                tree.treename = itemInfo.prefabName;
-                
+                Tree tree = new Tree(pos, itemInfo.prefabName);
 
                 GlobeController.instance.ChangeMode(GlobeMode.View);
 
                 // Debug.Log(JsonUtility.ToJson(tree, true));
-                int remain = GameManager.i.GetUser().getPoint(itemInfo.emotion) - itemInfo.cost;
-                GameManager.i.GetUser().setPoint(itemInfo.emotion, remain);
+                // int remain = GameManager.i.GetUser().getPoint(itemInfo.emotion) - itemInfo.cost;
+                GameManager.i.GetUser().UpdatePoints((Emotion)Enum.Parse(typeof(Emotion), itemInfo.emotion), -1*itemInfo.cost);
                 /*
                 Backend.i.CreateObject(itemInfo.emotion,(double)itemInfo.cost/100.0f,tree,(message)=>{
                     GameManager.i.UpdateUser();
@@ -148,20 +135,5 @@ public class ItemCreator : MonoBehaviour
             itemInfo = null;
             isActive = false;
             activeAlert.SetActive(false);
-    }
-
-    bool isWater(Vector3 pos)
-    {
-        RaycastHit hit;
-        if (!Physics.Raycast(globe.transform.position, pos, out hit, 100f))
-        {
-            return false;
-        }
-            
-
-        if(hit.transform.gameObject.tag=="water"){
-            return true;
-        }
-        return false;
     }
 }

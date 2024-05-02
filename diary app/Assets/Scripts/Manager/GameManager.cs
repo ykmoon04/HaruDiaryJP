@@ -12,7 +12,6 @@ public class GameManager : MonoBehaviour
     private void Awake() {
         if(i==null) i=this;
         escCnt = 0;
-        // SetResolution();
         DontDestroyOnLoad(gameObject);
     }
 
@@ -31,16 +30,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
     void DoubleClick()
     {
         escCnt = 0;
-    }
-    
-
-    public void SetTreeList(TreeList trees){
-        Debug.Log("Set Tree List");
-        Debug.Log(trees.tree_list);
-        treeList = trees;
     }
 
     public TreeList getTreeList()=>treeList;
@@ -50,23 +43,8 @@ public class GameManager : MonoBehaviour
         this.user = user;
     }
 
-    public void UpdateUser(){
-        Debug.Log("유저 정보 업데이트 시작");
-
-        /*
-        Backend.i.ReadUser(user.GetId(),user.GetPassword(), (newUser)=>{
-            Debug.Log("유저 정보 업데이트 성공");
-            user = newUser;
-            user.SetPoint();
-            // storeUI.i.UpdateStore();
-            CalendarController._calendarInstance.ReloadPanel();
-        });
-        */
-    }
-
     public void UpdateUser(DiaryAnalysis analysis) {
         if (user != null) {
-            Debug.Log("update user");
             user.UpdatePoints(analysis);
             Backend.i.UpdateUser((newUser)=>{
                 this.user = newUser;
@@ -74,23 +52,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void SetTreeList(TreeList treeList){
+        this.treeList = treeList;
+    }
 
     public void LogOut(){
         DataManager.i.DeleteGameData();
         LoadSceneManager.i.ToLogin();
     }
-
-    public void SetResolution()
-    {
-        int setWidth = 1440; // 화면 너비
-        int setHeight = 2960; // 화면 높이
-
-        //해상도를 설정값에 따라 변경
-        //3번째 파라미터는 풀스크린 모드를 설정 > true : 풀스크린, false : 창모드
-        Screen.SetResolution(setWidth, setHeight, true);
-    }
-
- 
 
 
     private void OnApplicationPause(bool pauseStatus) {

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 [Serializable]
 public class TreeList {
-    public List<Tree> tree_list;
+    public List<Tree> trees;
 
 }
 
@@ -13,29 +13,28 @@ public class TreeList {
 
 [Serializable]
 public class Tree {
-    public string treeid;
-    public string treename;
-    public string id;
-    public double positionx;
-    public double positiony;
-    public double positionz;
+    public string tree_name;
+    public string user_id;
+    public double position_x;
+    public double position_y;
+    public double position_z;
     
 
+    public Tree(){}
 
-    /*
-    public Tree(double x, double y, double z, string treeid){
-        id = GameManager.i.GetUser().GetId();
-        positionx = x;
-        positiony = y;
-        positionz = z;
-        this.treeid = treeid;
+    public Tree(Vector3 position, string treeName){
+        user_id = GameManager.i.GetUser().GetId();
+        position_x = position.x;
+        position_y = position.y;
+        position_z = position.z;
+        this.tree_name = treeName;
     }
 
-    public double getx()=>positionx;
+    public double getx()=>position_x;
 
-    public double gety()=>positiony;
+    public double gety()=>position_y;
 
-    public double getz()=>positionz;
-    */
+    public double getz()=>position_z;
+    
 }
 

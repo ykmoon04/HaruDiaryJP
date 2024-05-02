@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 public enum GlobeMode{
     View = 0,
-    Touched = 1,
     Plant = 2  
 }
 public class GlobeController : MonoBehaviour
@@ -95,7 +94,6 @@ public class GlobeController : MonoBehaviour
                 }
             }
             else if(Input.touches[0].phase == TouchPhase.Ended){
-        //  Debug.Log("GLOBE CONTROLLER");
 
                 if(isDragging) isDragging = false;
             }

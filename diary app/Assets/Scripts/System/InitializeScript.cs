@@ -40,10 +40,15 @@ public class InitializeScript : MonoBehaviour
     }
 
     public void AutoLogin(string id){
-       Backend.i?.ReadUser(id, (user)=>{
+        Backend.i?.ReadUser(id, (user)=>{
             GameManager.i.SetUser(user);
-            LoadSceneManager.i.ToMain(); 
+            Backend.i?.ReadTrees((treeList)=>{
+                GameManager.i.SetTreeList(treeList);
+                LoadSceneManager.i.ToMain(); 
+        });
         }); 
+
+
     }
 
 

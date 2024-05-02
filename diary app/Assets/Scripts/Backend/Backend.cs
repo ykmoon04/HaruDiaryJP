@@ -12,6 +12,7 @@ public class Backend : MonoBehaviour
     enum Resource {
         Users,
         Diaries,
+        Trees,
     }
 
     enum Action {
@@ -91,80 +92,21 @@ public class Backend : MonoBehaviour
         HttpRequest.i.Post<Diary>(url, DictToJson(data), onSuccess, AlertOnFailed);
     }
 
+    
+    public void CreateTree(Tree tree, Action<string> onSuccess){
+        string url = BuildUrl(Resource.Trees,Action.Create);
+        HttpRequest.i.Post<string>(url, JsonUtility.ToJson(tree), onSuccess, AlertOnFailed);
+    }
+
+    public void ReadTrees(Action<TreeList> onSuccess){
+
+        string url = BuildUrl(Resource.Trees, GameManager.i.GetUser().GetId());
+        HttpRequest.i.Get<TreeList>(url, onSuccess, AlertOnFailed);
+    }
+
 
 /*???
-    public void ReadUser(string id, string password, Action<User> onSuccess, Action<string> onFailed){
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data.Add("id",id);
-        data.Add("password", password);
-
-        HttpRequest.i.Post<User>(url+SubUrl.member_read.ToString(),DictToJson(data), onSuccess, onFailed);
-    }
-
-    */
-
-
-/*
-
-    // 유저 갱신 임시
-    public void UpdateUserInfo(UserInfo field, string newData, Action<string> onSuccess){
-        User user = GameManager.i.GetUser();
-
-        if(user==null) {
-            AlertOnFailed("유저가 존재하지 않음");
-        }
-
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data.Add("id",user.GetId());
-        data.Add("password", user.GetPassword());
-        data.Add(field.ToString(), newData);
-
-        HttpRequest.i.Post<string>(url+SubUrl.member_update.ToString(),DictToJson(data), onSuccess, AlertOnFailed);
-    }
-
-    // 회원 탈퇴
-    public void DeleteUser(Action<string> onSuccess){
-        User user = GameManager.i.GetUser();
-
-        if(user==null) {
-            AlertOnFailed("유저가 존재하지 않음");
-        }
-
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data.Add("id",user.GetId());
-        data.Add("password", user.GetPassword());
-        
-        HttpRequest.i.Post<string>(url+SubUrl.member_delete.ToString(), DictToJson(data), onSuccess, AlertOnFailed);
-    }
-
-    // 일기 등록
-    // \n -> \n\n으로 변환하는 거는 호출부에서
-    public void CreateDiary(string id, string text, Action<DiaryResult> onSuccess){
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data.Add("id",GameManager.i.GetUser().GetId());
-        data.Add("text", text);
-
-        LoadingWindow.i.StartLoading();
-        HttpRequest.i.Post<DiaryResult>(url+SubUrl.diary_create.ToString(), DictToJson(data), onSuccess, AlertOnFailed);
-    }
-
-    // 일기 읽기
-    public void ReadDiary(string id, string targetDate, Action<Diary> onSuccess){
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data.Add("id",GameManager.i.GetUser().GetId());
-        data.Add("targetdate", targetDate);
-        Debug.Log("확인- "+targetDate);
-        HttpRequest.i.Post<Diary>(url+SubUrl.diary_read.ToString(), DictToJson(data), onSuccess, OnFailed);
-    }
-
-    public void ReadDiary(string id, string targetDate, Action<Diary> onSuccess, Action<string> onFailed){
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data.Add("id",GameManager.i.GetUser().GetId());
-        data.Add("targetdate", targetDate);
-//        Debug.Log(targetDate);
-
-        HttpRequest.i.Post<Diary>(url+SubUrl.diary_read.ToString(), DictToJson(data), onSuccess, onFailed);
-    }
+    
 
     // 일기 갱신
     public void UpdateDiary(string id, string text, string targetDate, Action<DiaryResult> onSuccess){
@@ -186,20 +128,7 @@ public class Backend : MonoBehaviour
     }
 
     
-    // 나무 구매
-    public void CreateObject(string emotion, double cost, Tree tree, Action<string> onSuccess){
-        
-        Dictionary<string, string> data = new Dictionary<string, string>();
-        data.Add("id",GameManager.i.GetUser().GetId());
-        data.Add("cost_sentiment",emotion);
-        data.Add("cost_quantity",cost.ToString());
-        data.Add("treename",tree.treename);
-        data.Add("positionx",tree.positionx.ToString());
-        data.Add("positiony",tree.positiony.ToString());
-        data.Add("positionz",tree.positionz.ToString());
-
-        HttpRequest.i.Post<string>(url+SubUrl.tree_create.ToString(), DictToJson(data), onSuccess, AlertOnFailed);
-    }
+    
 
 
 

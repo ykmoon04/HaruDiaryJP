@@ -16,13 +16,13 @@ public class ItemManager : MonoBehaviour {
         }   
     }
 
-    public ItemPrefabCollection GetCollection(Emotions em){
+    public ItemPrefabCollection GetCollection(Emotion em){
         return emotionItems[(int)em];
     }
 
     public ItemPrefabCollection GetCollection(string em){
-        Debug.Log((int)Enum.Parse(typeof(Emotions),em));
-        return emotionItems[(int)Enum.Parse(typeof(Emotions),em)];
+        Debug.Log((int)Enum.Parse(typeof(Emotion),em));
+        return emotionItems[(int)Enum.Parse(typeof(Emotion),em)];
     }
 
     public GameObject GetPrefab(string treename){
