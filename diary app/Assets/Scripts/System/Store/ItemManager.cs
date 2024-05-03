@@ -20,10 +20,6 @@ public class ItemManager : MonoBehaviour {
         return emotionItems[(int)em];
     }
 
-    public ItemPrefabCollection GetCollection(string em){
-        Debug.Log((int)Enum.Parse(typeof(Emotion),em));
-        return emotionItems[(int)Enum.Parse(typeof(Emotion),em)];
-    }
 
     public GameObject GetPrefab(string treename){
         foreach(ItemPrefabCollection c in emotionItems){

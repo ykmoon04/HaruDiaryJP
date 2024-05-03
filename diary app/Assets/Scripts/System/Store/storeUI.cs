@@ -73,7 +73,7 @@ public class storeUI : MonoBehaviour
     public void BuyItem(ItemInfo info){
         this.gameObject.SetActive(false);
 
-        ItemCreator.i.SwitchPlaceMode( info);
+        ItemCreator.i.SwitchPlaceMode(info);
     }
 
 
@@ -246,7 +246,7 @@ public class ItemInfo{
 public class ItemInfoList{
     
     [SerializeField]
-    private List<ItemInfo> happiness;
+    private List<ItemInfo> joy;
     [SerializeField]
     private List<ItemInfo> sadness;
     [SerializeField]
@@ -262,7 +262,7 @@ public class ItemInfoList{
 
     public void Init(){
         data = new Dictionary<Emotion, List<ItemInfo>>();
-        data.Add(Emotion.Joy, happiness);
+        data.Add(Emotion.Joy, joy);
         data.Add(Emotion.Sadness, sadness);
         data.Add(Emotion.Angry, angry);
         data.Add(Emotion.Fear, fear);

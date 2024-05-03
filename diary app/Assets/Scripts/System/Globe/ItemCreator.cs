@@ -86,10 +86,10 @@ public class ItemCreator : MonoBehaviour
         Invoke("ToggleActive",0.5f);
     }
 
-    public void placeTree(GameObject item,Tree t){
+    public void placeTree(GameObject item,Tree tree){
         
         Vector3 originalScale = item.transform.localScale;
-        Vector3 pos = new Vector3((float)t.position_x, (float)t.position_y,(float)t.position_z);
+        Vector3 pos = new Vector3((float)tree.position_x, (float)tree.position_y,(float)tree.position_z);
         Quaternion lookRotation = Quaternion.FromToRotation(Vector3.up, pos);
 
         GameObject clone = Instantiate(item, pos, lookRotation);   
@@ -101,39 +101,46 @@ public class ItemCreator : MonoBehaviour
 
     public void CreateTree(Vector3 pos){
             if(itemInfo != null){
-                // bounds = item.GetComponent<MeshFilter>().sharedMesh.bounds;
-                GameObject item = ItemManager.i.GetCollection(itemInfo.emotion).getPrefab(itemInfo.prefabName);
-                Vector3 direction = (globe.transform.position- pos);
-                pos += direction * (0.012f);
-                // Debug.Log(globe.transform.localPosition);
+                Emotion emotion = StringToEnum(itemInfo.emotion);
+
+
+                GameObject item = ItemManager.i.GetCollection(emotion).getPrefab(itemInfo.prefabName);
+                Vector3 direction = globe.transform.position- pos;
+                pos += direction * 0.012f;
                 Quaternion lookRotation = Quaternion.FromToRotation(Vector3.up, -1f*direction);
+                
 
                 Vector3 originalScale = item.transform.localScale;
-                GameObject clone = Instantiate(item, pos, lookRotation);    
+                GameObject clone = Instantiate(item, pos, lookRotation);  
+                Debug.Log("pos " +pos);  
 
                 clone.transform.localScale = originalScale*0.1f;
-                // Debug.Log(clone.transform.rotation);
                 clone.transform.parent = globe.transform;
 
-                Tree tree = new Tree(pos, itemInfo.prefabName);
+                Debug.Log("clone postion "+clone.transform.position);
+                 Debug.Log("clone local postion "+clone.transform.localPosition);
 
+                Tree tree = new Tree(clone.transform.localPosition, itemInfo.prefabName);
                 GlobeController.instance.ChangeMode(GlobeMode.View);
+                
+                Backend.i.CreateTree(tree,(message)=>{
+                    GameManager.i.GetUser().UpdatePoints(emotion, -1*itemInfo.cost);
+                    Backend.i.UpdateUser((user)=>{
+                        GameManager.i.SetUser(user);
+                    });
 
-                // Debug.Log(JsonUtility.ToJson(tree, true));
-                // int remain = GameManager.i.GetUser().getPoint(itemInfo.emotion) - itemInfo.cost;
-                GameManager.i.GetUser().UpdatePoints((Emotion)Enum.Parse(typeof(Emotion), itemInfo.emotion), -1*itemInfo.cost);
-                /*
-                Backend.i.CreateObject(itemInfo.emotion,(double)itemInfo.cost/100.0f,tree,(message)=>{
-                    GameManager.i.UpdateUser();
+                    itemInfo = null;
+                    isActive = false;
+                    activeAlert.SetActive(false);
                 });
-                */
+                
             }
 
-        
-            
+    }
 
-            itemInfo = null;
-            isActive = false;
-            activeAlert.SetActive(false);
+
+    public Emotion StringToEnum(string str){       
+        string em = char.ToUpper(str[0]) + str[1..];
+        return (Emotion)Enum.Parse(typeof(Emotion), em);
     }
 }

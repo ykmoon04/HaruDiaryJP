@@ -69,7 +69,6 @@ public class GlobeController : MonoBehaviour
             else if(Input.touches[0].phase == TouchPhase.Moved){
                 duration += Time.deltaTime;
                 if(duration > 0.01f){
-                    Debug.Log(isDragging);
                     isDragging = true;
                     Ray ray = Camera.main.ScreenPointToRay(Input.touches[0].position);
                     RaycastHit hit;

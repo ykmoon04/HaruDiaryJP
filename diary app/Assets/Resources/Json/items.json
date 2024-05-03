@@ -1,25 +1,25 @@
 {
-  "happiness": [
+  "joy": [
     {
-      "emotion": "happiness",
+      "emotion": "joy",
       "itemName": "행복한 나무",
       "prefabName": "tree1 01",
       "cost": 30
     },
     {
-      "emotion": "happiness",
+      "emotion": "joy",
       "itemName": "행복한 비행선",
       "prefabName": "aircraft1",
       "cost": 50
     },
     {
-      "emotion": "happiness",
+      "emotion": "joy",
       "itemName": "행복한 해적선",
       "prefabName": "ship1",
       "cost": 70
     },
     {
-      "emotion": "happiness",
+      "emotion": "joy",
       "itemName": "행복한 고래",
       "prefabName": "whale1",
       "cost": 70
