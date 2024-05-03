@@ -20,7 +20,6 @@ public class CalendarController : MonoBehaviour
     const int _totalDateNum = 42;
 
     private DateTime _dateTime;
-    public static CalendarController _calendarInstance;
 
 
     private void OnEnable() {
@@ -28,7 +27,6 @@ public class CalendarController : MonoBehaviour
     }
 
     public void Init(){
-        _calendarInstance = this;
         Vector3 startPos = _item.transform.localPosition;
         _dateItems.Clear();
         _dateItems.Add(_item);
@@ -97,6 +95,7 @@ public class CalendarController : MonoBehaviour
                     string targetDate = string.Format("{0}{1:D2}{2:D2}",thatDay.Year, thatDay.Month, date+1);
                     if(diaryOfMonth.Keys.Contains(targetDate)){
                         Debug.Log(targetDate);
+                        _dateItems[i].GetComponent<DateItem>().SetDiary(diaryOfMonth[targetDate]);
                         Emotion em = diaryOfMonth[targetDate].GetMaxEmotionType();
                         Color color;
 
@@ -130,6 +129,7 @@ public class CalendarController : MonoBehaviour
                         }
                     }
                     else{
+                        _dateItems[i].GetComponent<DateItem>().SetDiary(null);
                         checkImg.enabled = false;
                     }
                     
