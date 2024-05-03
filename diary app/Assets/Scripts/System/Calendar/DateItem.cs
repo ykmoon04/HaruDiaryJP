@@ -20,11 +20,9 @@ public class DateItem : MonoBehaviour
 
     public void OnClick(){
         if(diary == null){
-            Debug.Log("hello");
             return;
         }
         
-        Debug.Log("hello2");
         DateTime date = DateTime.ParseExact(diary.date, "yyyyMMdd", CultureInfo.InvariantCulture);
         string formattedDate = date.ToString("yyyy.MM.dd");
         dateLabel.text = formattedDate;

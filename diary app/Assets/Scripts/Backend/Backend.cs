@@ -72,7 +72,7 @@ public class Backend : MonoBehaviour
     // Read all diaries of the month
 
     public void ReadDiaries(string targetDate, Action<Diaries> onSuccess){
-        string url = BuildUrl(Resource.Diaries, $"{GameManager.i.GetUser().GetId()}/{targetDate}");
+        string url = BuildUrl(Resource.Diaries, Action.Read, $"{GameManager.i.GetUser().GetId()}/{targetDate}");
         HttpRequest.i.Get<Diaries>(url,onSuccess, AlertOnFailed);
     } 
 

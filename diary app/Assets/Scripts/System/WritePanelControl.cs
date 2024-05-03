@@ -37,7 +37,9 @@ public class WritePanelControl : MonoBehaviour
     }
     private void ReadDiary(){
         if(GameManager.i.GetUser() != null){
-            Backend.i.ReadDiary(today.ToString("yyyyMMdd"), OnReadDiarySuccess, (noDiary)=>{});
+            Backend.i.ReadDiary(today.ToString("yyyyMMdd"), OnReadDiarySuccess, (noDiary)=>{
+                Debug.Log("dsfdsfsd");
+            });
         }
     }
 

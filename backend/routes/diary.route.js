@@ -8,7 +8,7 @@ const {
   getDiary,
 } = require('../controllers/diary.controller.js');
 
-router.get('/:id/:month', getDiaries);
+router.get('/read/:id/:month', getDiaries);
 router.get('/:id/:date', getDiary);
 router.post('/create', createDiary);
 
