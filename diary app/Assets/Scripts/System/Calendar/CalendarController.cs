@@ -88,13 +88,12 @@ public class CalendarController : MonoBehaviour
                 if (thatDay.Month == firstDay.Month)
                 {
                     _dateItems[i].SetActive(true);
-
+                    _dateItems[i].transform.GetChild(1).gameObject.SetActive(true);
                     _dateItems[i].GetComponent<Image>().enabled = true;
                     _dateItems[i].GetComponent<Button>().enabled = true;
 
                     string targetDate = string.Format("{0}{1:D2}{2:D2}",thatDay.Year, thatDay.Month, date+1);
                     if(diaryOfMonth.Keys.Contains(targetDate)){
-                        Debug.Log(targetDate);
                         _dateItems[i].GetComponent<DateItem>().SetDiary(diaryOfMonth[targetDate]);
                         Emotion em = diaryOfMonth[targetDate].GetMaxEmotionType();
                         Color color;
@@ -103,7 +102,7 @@ public class CalendarController : MonoBehaviour
                         
                         switch(em){
                             case Emotion.Joy:
-                                    ColorUtility.TryParseHtmlString(MyColor.joy, out color);
+                                ColorUtility.TryParseHtmlString(MyColor.joy, out color);
                                 checkImg.color = color;
                             break;
                             case Emotion.Sadness:
@@ -129,6 +128,7 @@ public class CalendarController : MonoBehaviour
                         }
                     }
                     else{
+
                         _dateItems[i].GetComponent<DateItem>().SetDiary(null);
                         checkImg.enabled = false;
                     }
