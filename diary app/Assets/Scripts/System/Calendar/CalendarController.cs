@@ -5,6 +5,8 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+
 public class CalendarController : MonoBehaviour
 {
     public RectTransform background;
@@ -44,8 +46,6 @@ public class CalendarController : MonoBehaviour
         }
 
         _dateTime = DateTime.Now;
-
-        CreateCalendar();
     }
 
     public void ReloadPanel(){
@@ -55,7 +55,21 @@ public class CalendarController : MonoBehaviour
 
     void CreateCalendar()
     {
-        
+        _yearNumText.text = _dateTime.Year.ToString()+"년";
+        _monthNumText.text = _dateTime.Month.ToString()+"월";
+
+
+        // Read all diaries of the month first
+        Dictionary<string, Diary> diaryOfMonth = new Dictionary<string, Diary>();
+        Backend.i.ReadDiaries(_dateTime.ToString("yyyyMM"),(diaries)=>{
+            foreach(Diary diary in diaries.diaries){
+                diaryOfMonth.Add(diary.date, diary);
+            }
+            CreateDateItem(diaryOfMonth);
+        });
+    }
+
+    public void CreateDateItem(Dictionary<string, Diary> diaryOfMonth){
         DateTime firstDay = _dateTime.AddDays(-(_dateTime.Day - 1));
         int index = GetDays(firstDay.DayOfWeek);
         int lastDay = DateTime.DaysInMonth(_dateTime.Year, _dateTime.Month);
@@ -80,49 +94,45 @@ public class CalendarController : MonoBehaviour
                     _dateItems[i].GetComponent<Image>().enabled = true;
                     _dateItems[i].GetComponent<Button>().enabled = true;
 
-                    string targetDate = String.Format("{0}{1:D2}{2:D2}",thatDay.Year, thatDay.Month, date+1);
-                    if(GameManager.i.GetUser() != null){
-                        Backend.i.ReadDiary( targetDate, (res)=>{
-                            if(!res.hasText()){
-                                return;
-                            }
+                    string targetDate = string.Format("{0}{1:D2}{2:D2}",thatDay.Year, thatDay.Month, date+1);
+                    if(diaryOfMonth.Keys.Contains(targetDate)){
+                        Debug.Log(targetDate);
+                        Emotion em = diaryOfMonth[targetDate].GetMaxEmotionType();
+                        Color color;
 
-                            Emotion em = res.GetMaxEmotionType();
-                            Debug.Log(String.Format("targetDate : {0} [{1}] {2}", targetDate,res.text, em.ToString()));
-                            Color color;
-
-                            checkImg.enabled=true;
-                            
-                            switch(em){
-                                case Emotion.Joy:
-                                     ColorUtility.TryParseHtmlString(MyColor.joy, out color);
-                                    checkImg.color = color;
+                        checkImg.enabled=true;
+                        
+                        switch(em){
+                            case Emotion.Joy:
+                                    ColorUtility.TryParseHtmlString(MyColor.joy, out color);
+                                checkImg.color = color;
+                            break;
+                            case Emotion.Sadness:
+                                ColorUtility.TryParseHtmlString(MyColor.sadness, out color);
+                                checkImg.color = color;
+                            break;
+                            case Emotion.Disgust:
+                                ColorUtility.TryParseHtmlString(MyColor.disgust, out color);
+                                checkImg.color = color;                                
+                            break;
+                            case Emotion.Angry:
+                                ColorUtility.TryParseHtmlString(MyColor.angry, out color);
+                                checkImg.color = color;                                
                                 break;
-                                case Emotion.Sadness:
-                                   ColorUtility.TryParseHtmlString(MyColor.sadness, out color);
-                                    checkImg.color = color;
+                            case Emotion.Surprise:
+                                ColorUtility.TryParseHtmlString(MyColor.surprise, out color);
+                                checkImg.color = color;                                
                                 break;
-                                case Emotion.Disgust:
-                                    ColorUtility.TryParseHtmlString(MyColor.disgust, out color);
-                                    checkImg.color = color;                                
-                                break;
-                                case Emotion.Angry:
-                                    ColorUtility.TryParseHtmlString(MyColor.angry, out color);
-                                    checkImg.color = color;                                
+                            case Emotion.Fear:
+                                ColorUtility.TryParseHtmlString(MyColor.fear, out color);
+                                checkImg.color = color;                               
                                     break;
-                                case Emotion.Surprise:
-                                    ColorUtility.TryParseHtmlString(MyColor.surprise, out color);
-                                    checkImg.color = color;                                
-                                    break;
-                                case Emotion.Fear:
-                                    ColorUtility.TryParseHtmlString(MyColor.fear, out color);
-                                    checkImg.color = color;                               
-                                     break;
-                            }
-                        },(noDiary)=>{
-                            checkImg.enabled = false;
-                        });
+                        }
                     }
+                    else{
+                        checkImg.enabled = false;
+                    }
+                    
                     label.text = (date + 1).ToString();
                     date++;
                 }
@@ -135,11 +145,6 @@ public class CalendarController : MonoBehaviour
                 label.text = "";
             }
         }
-
-        
-        _yearNumText.text = _dateTime.Year.ToString()+"년";
-        _monthNumText.text = _dateTime.Month.ToString()+"월";
-
     }
 
     int GetDays(DayOfWeek day)

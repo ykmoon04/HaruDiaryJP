@@ -3,9 +3,9 @@ const Diary = require('../models/diary.model.js');
 
 const getDiaries = async (req, res) => {
   try {
-    const { id } = req.params;
-    const diaries = await Diary.find({ user_id: id });
-    res.status(200).json(diaries);
+    const { id, month } = req.params;
+    const diaries = await Diary.find({ user_id: id, date: { $regex: month } });
+    res.status(200).json({ diaries: diaries });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

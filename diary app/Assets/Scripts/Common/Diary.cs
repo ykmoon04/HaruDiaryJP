@@ -59,6 +59,9 @@ public class DiaryAnalysis : IEnumerable
         yield return surprise;
         yield return fear;
     }
+}
 
-
+[System.Serializable]
+public class Diaries{
+    public List<Diary> diaries;
 }

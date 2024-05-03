@@ -69,11 +69,12 @@ public class Backend : MonoBehaviour
     }
 
 
-    // Read diary
-    public void ReadDiary(string targetDate, Action<Diary> onSuccess){
+    // Read all diaries of the month
+
+    public void ReadDiaries(string targetDate, Action<Diaries> onSuccess){
         string url = BuildUrl(Resource.Diaries, $"{GameManager.i.GetUser().GetId()}/{targetDate}");
-        HttpRequest.i.Get<Diary>(url,onSuccess, AlertOnFailed);
-    }
+        HttpRequest.i.Get<Diaries>(url,onSuccess, AlertOnFailed);
+    } 
 
     public void ReadDiary(string targetDate, Action<Diary> onSuccess, Action<string> onFailed){
         string url = BuildUrl(Resource.Diaries, $"{GameManager.i.GetUser().GetId()}/{targetDate}");
