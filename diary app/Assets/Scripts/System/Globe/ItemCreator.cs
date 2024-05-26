@@ -108,14 +108,17 @@ public class ItemCreator : MonoBehaviour
     }
 
     public void CreateTree(Vector3 pos){
+
+        Vector3 direction = globe.transform.position- pos;
+            pos += direction * 0.012f;
+            Quaternion lookRotation = Quaternion.FromToRotation(Vector3.up, -1f*direction);
+
         if(itemInfo != null && clone == null){
             Emotion emotion = StringToEnum(itemInfo.emotion);
 
 
             GameObject item = ItemManager.i.GetCollection(emotion).getPrefab(itemInfo.prefabName);
-            Vector3 direction = globe.transform.position- pos;
-            pos += direction * 0.012f;
-            Quaternion lookRotation = Quaternion.FromToRotation(Vector3.up, -1f*direction);
+            
             
 
             Vector3 originalScale = item.transform.localScale;
@@ -126,12 +129,14 @@ public class ItemCreator : MonoBehaviour
         }
 
         if(clone != null){
-            clone.transform.localPosition = pos;
+            clone.transform.position = pos;
+            clone.transform.rotation = lookRotation;
         }
      
     }
     
     public void CreateTree(){
+        ToggleActive();
    
         Tree tree = new Tree(clone.transform.localPosition, itemInfo.prefabName);
         GlobeController.instance.ChangeMode(GlobeMode.View);
