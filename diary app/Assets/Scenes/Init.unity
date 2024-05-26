@@ -773,6 +773,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6407920588073419851}
   - component: {fileID: 6407920588073419862}
+  - component: {fileID: 6407920588073419863}
   m_Layer: 0
   m_Name: LoadingWindow
   m_TagString: Untagged
@@ -815,3 +816,15 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d89831ff9ef45ad4091ab394f5df463e, type: 3}
   - {fileID: 21300000, guid: 78bd92def4f3cdc48a3a723524b8a6b6, type: 3}
   isLoading: 0
+--- !u!114 &6407920588073419863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6407920588073419849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a68a894f3ad93c042adbd1d049217301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

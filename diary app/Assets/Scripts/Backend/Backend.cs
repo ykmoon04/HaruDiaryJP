@@ -24,7 +24,7 @@ public class Backend : MonoBehaviour
 
 
 
-    private string url = "http://localhost:3000/api/";
+    private string url = "https://c6ac-218-236-163-64.ngrok-free.app/api/";
     private void Awake() {
         if(i==null) i=this;
         DontDestroyOnLoad(gameObject);

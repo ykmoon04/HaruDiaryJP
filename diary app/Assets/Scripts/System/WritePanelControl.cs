@@ -84,26 +84,26 @@ public class WritePanelControl : MonoBehaviour
 
         Dictionary<string, (double value, string color, string emotionName)> emotions = new Dictionary<string, (double, string, string)>
         {
-            { "joy", (analysis.joy, MyColor.joy, "행복") },
-            { "sadness", (analysis.sadness, MyColor.sadness, "슬픔") },
-            { "angry", (analysis.angry, MyColor.angry, "분노") },
-            { "disgust", (analysis.disgust, MyColor.disgust, "혐오") },
-            { "surprise", (analysis.surprise, MyColor.surprise, "놀람") },
-            { "fear", (analysis.fear, MyColor.fear, "공포") }
+            { "joy", (analysis.joy, MyColor.joy, "幸せ") },
+            { "sadness", (analysis.sadness, MyColor.sadness, "悲しみ") },
+            { "angry", (analysis.angry, MyColor.angry, "起こり") },
+            { "disgust", (analysis.disgust, MyColor.disgust, "不快") },
+            { "surprise", (analysis.surprise, MyColor.surprise, "驚き") },
+            { "fear", (analysis.fear, MyColor.fear, "恐怖") }
         };
 
-        string resultText = "오늘 하루는 \n";
+        string resultText = "今日は \n";
 
         bool anyEmotionSignificant = false;
         foreach (var emotion in emotions) {
             if (emotion.Value.value > 0.1) {
                 anyEmotionSignificant = true;
-                resultText += string.Format("<color={0}>{1}</color>이 <color={2}>{3} 포인트</color>\n",
+                resultText += string.Format("<color={0}>{1}</color>が <color={2}>{3} pt</color>\n",
                     emotion.Value.color, emotion.Value.emotionName, emotion.Value.color, Math.Round(emotion.Value.value * 100, 0));
             }
         }
 
-        resultText += anyEmotionSignificant ? "만큼 있었네요!" : "무난했어요!";
+        resultText += anyEmotionSignificant ? "の日でしたね！" : "大丈夫でした！";
         StatOfTheDay.text = resultText;
     }
 }

@@ -2,25 +2,25 @@
   "joy": [
     {
       "emotion": "joy",
-      "itemName": "행복한 나무",
+      "itemName": "幸せな木",
       "prefabName": "tree1 01",
       "cost": 30
     },
     {
       "emotion": "joy",
-      "itemName": "행복한 비행선",
+      "itemName": "幸せな飛行船",
       "prefabName": "aircraft1",
       "cost": 50
     },
     {
       "emotion": "joy",
-      "itemName": "행복한 해적선",
+      "itemName": "幸せな船",
       "prefabName": "ship1",
       "cost": 70
     },
     {
       "emotion": "joy",
-      "itemName": "행복한 고래",
+      "itemName": "幸せなクジラ",
       "prefabName": "whale1",
       "cost": 70
     }
@@ -29,25 +29,25 @@
   "sadness": [
     {
       "emotion": "sadness",
-      "itemName": "슬픈 나무",
+      "itemName": "悲しい木",
       "prefabName": "tree2 01",
       "cost": 30
     },
     {
       "emotion": "sadness",
-      "itemName": "슬픈 비행선",
+      "itemName": "悲しい飛行船",
       "prefabName": "aircraft2",
       "cost": 50
     },
     {
       "emotion": "sadness",
-      "itemName": "슬픈 해적선",
+      "itemName": "悲しい船",
       "prefabName": "ship2",
       "cost": 70
     },
     {
       "emotion": "sadness",
-      "itemName": "슬픈 고래",
+      "itemName": "悲しいクジラ",
       "prefabName": "whale2",
       "cost": 70
     }
@@ -56,25 +56,25 @@
   "angry": [
     {
       "emotion": "angry",
-      "itemName": "분노한 나무",
+      "itemName": "怒った木",
       "prefabName": "tree3 01",
       "cost": 30
     },
     {
       "emotion": "angry",
-      "itemName": "분노한 비행선",
+      "itemName": "怒った飛行船",
       "prefabName": "aircraft3",
       "cost": 50
     },
     {
       "emotion": "angry",
-      "itemName": "분노한 해적선",
+      "itemName": "怒った船",
       "prefabName": "ship3",
       "cost": 70
     },
     {
       "emotion": "angry",
-      "itemName": "분노한 고래",
+      "itemName": "怒ったクジラ",
       "prefabName": "whale3",
       "cost": 70
     }
@@ -83,25 +83,25 @@
   "fear": [
     {
       "emotion": "fear",
-      "itemName": "두려운 나무",
+      "itemName": "恐ろしい木",
       "prefabName": "tree4 01",
       "cost": 30
     },
     {
       "emotion": "fear",
-      "itemName": "두려운 비행선",
+      "itemName": "恐ろしい飛行船",
       "prefabName": "aircraft4",
       "cost": 50
     },
     {
       "emotion": "fear",
-      "itemName": "두려운 해적선",
+      "itemName": "恐ろしい船",
       "prefabName": "ship4",
       "cost": 70
     },
     {
       "emotion": "fear",
-      "itemName": "두려운 고래",
+      "itemName": "恐ろしいクジラ",
       "prefabName": "whale4",
       "cost": 70
     }
@@ -110,25 +110,25 @@
   "surprise": [
     {
       "emotion": "surprise",
-      "itemName": "놀라운 나무",
+      "itemName": "驚く木",
       "prefabName": "tree5 01",
       "cost": 30
     },
     {
       "emotion": "surprise",
-      "itemName": "놀라운 비행선",
+      "itemName": "驚く飛行船",
       "prefabName": "aircraft5",
       "cost": 50
     },
     {
       "emotion": "surprise",
-      "itemName": "놀라운 해적선",
+      "itemName": "驚く船",
       "prefabName": "ship5",
       "cost": 70
     },
     {
       "emotion": "surprise",
-      "itemName": "놀라운 고래",
+      "itemName": "驚くクジラ",
       "prefabName": "whale5",
       "cost": 70
     }
@@ -137,25 +137,25 @@
   "disgust": [
     {
       "emotion": "disgust",
-      "itemName": "불쾌한 나무",
+      "itemName": "不快な木",
       "prefabName": "tree6 01",
       "cost": 30
     },
     {
       "emotion": "disgust",
-      "itemName": "불쾌한 비행선",
+      "itemName": "不快な飛行船",
       "prefabName": "aircraft6",
       "cost": 50
     },
     {
       "emotion": "disgust",
-      "itemName": "불쾌한 해적선",
+      "itemName": "不快な船",
       "prefabName": "ship6",
       "cost": 70
     },
     {
       "emotion": "disgust",
-      "itemName": "불쾌한 고래",
+      "itemName": "不快なクジラ",
       "prefabName": "whale6",
       "cost": 70
     }

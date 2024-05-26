@@ -27,7 +27,7 @@ const getDiary = async (req, res) => {
 
 const createDiary = async (req, res) => {
   try {
-    const apiUrl = 'http://127.0.0.1:5000/eval';
+    const apiUrl = 'https://e1d0-218-236-163-64.ngrok-free.app/eval';
 
     console.log(req.body.text);
     const analysisResult = await axios.post(

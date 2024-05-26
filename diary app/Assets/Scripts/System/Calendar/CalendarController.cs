@@ -53,8 +53,8 @@ public class CalendarController : MonoBehaviour
 
     void CreateCalendar()
     {
-        _yearNumText.text = _dateTime.Year.ToString()+"년";
-        _monthNumText.text = _dateTime.Month.ToString()+"월";
+        _yearNumText.text = _dateTime.Year.ToString()+"年";
+        _monthNumText.text = _dateTime.Month.ToString()+"月";
 
 
         // Read all diaries of the month first

@@ -43,6 +43,7 @@ public class storeUI : MonoBehaviour
     public void Init(){
         panels = new List<Transform>();
         panels = scrollView.transform.GetChild(0).GetComponentsInChildren<Transform>(true).ToList();
+        Debug.Log("gmdmdmdmda" + panels.Count);
         panels.RemoveAt(0);
 
         btns = tabs.transform.GetComponentsInChildren<Image>(true).ToList();
@@ -220,6 +221,8 @@ public class storeUI : MonoBehaviour
 
     public void UpdateStore(Emotion e){
         int pt = GameManager.i.GetUser().getPoint(e);
+        Debug.Log("1" + panels + e.ToString());
+        Debug.Log("2" + panels[(int)e]);
         Button[] btns = panels[(int)e].GetComponentsInChildren<Button>();
         foreach(Button btn in btns){
             if(Int32.Parse(btn.transform.GetComponentInChildren<Text>().text) > (int)pt){
