@@ -8,7 +8,6 @@ public class ItemCreator : MonoBehaviour
     public static ItemCreator i;
     public Button placeBtn;
     public GameObject globe;
-    public GameObject flag;
 
     public GameObject activeAlert;
     Bounds bounds;
@@ -19,6 +18,7 @@ public class ItemCreator : MonoBehaviour
 
 
     ItemInfo itemInfo;
+    GameObject clone;
 
 
     public bool isActive;
@@ -31,7 +31,6 @@ public class ItemCreator : MonoBehaviour
             activeAlert.SetActive(true);
             GlobeController.instance.ChangeMode(GlobeMode.Plant);
             placeBtn.gameObject.SetActive(true);
-            flag.gameObject.SetActive(true);
         }
         else{
             placeBtn.gameObject.SetActive(false);
@@ -58,16 +57,12 @@ public class ItemCreator : MonoBehaviour
             if(Physics.Raycast(ray, out hitObj, Mathf.Infinity))
             {
                 Debug.DrawRay(ray.origin, hitObj.point-ray.origin, Color.red, 5f);
-                // CreateTree(hitObj.point);
-                MoveFlag(hitObj.point);
+                CreateTree(hitObj.point);
+                // MoveFlag(hitObj.point);
             }
- 
         }
     }
 
-    public void MoveFlag(Vector3 pos){
-        flag.transform.position = pos;
-    }
 
     private void Awake() {
         i = this;
@@ -112,44 +107,47 @@ public class ItemCreator : MonoBehaviour
         clone.transform.localPosition = pos;
     }
 
+    public void CreateTree(Vector3 pos){
+        if(itemInfo != null && clone == null){
+            Emotion emotion = StringToEnum(itemInfo.emotion);
+
+
+            GameObject item = ItemManager.i.GetCollection(emotion).getPrefab(itemInfo.prefabName);
+            Vector3 direction = globe.transform.position- pos;
+            pos += direction * 0.012f;
+            Quaternion lookRotation = Quaternion.FromToRotation(Vector3.up, -1f*direction);
+            
+
+            Vector3 originalScale = item.transform.localScale;
+            clone = Instantiate(item, pos, lookRotation);  
+
+            clone.transform.localScale = originalScale*0.1f;
+            clone.transform.parent = globe.transform;
+        }
+
+        if(clone != null){
+            clone.transform.localPosition = pos;
+        }
+     
+    }
+    
     public void CreateTree(){
-        Vector3 pos = flag.transform.position;
-        flag.gameObject.SetActive(false);
-            if(itemInfo != null){
-                Emotion emotion = StringToEnum(itemInfo.emotion);
+   
+        Tree tree = new Tree(clone.transform.localPosition, itemInfo.prefabName);
+        GlobeController.instance.ChangeMode(GlobeMode.View);
+        
+        Backend.i.CreateTree(tree,(message)=>{
+            GameManager.i.GetUser().UpdatePoints(StringToEnum(itemInfo.emotion), -1*itemInfo.cost);
+            Backend.i.UpdateUser((user)=>{
+                GameManager.i.SetUser(user);
+            });
 
-
-                GameObject item = ItemManager.i.GetCollection(emotion).getPrefab(itemInfo.prefabName);
-                Vector3 direction = globe.transform.position- pos;
-                pos += direction * 0.012f;
-                Quaternion lookRotation = Quaternion.FromToRotation(Vector3.up, -1f*direction);
-                
-
-                Vector3 originalScale = item.transform.localScale;
-                GameObject clone = Instantiate(item, pos, lookRotation);  
-                Debug.Log("pos " +pos);  
-
-                clone.transform.localScale = originalScale*0.1f;
-                clone.transform.parent = globe.transform;
-
-                Debug.Log("clone postion "+clone.transform.position);
-                Debug.Log("clone local postion "+clone.transform.localPosition);
-
-                Tree tree = new Tree(clone.transform.localPosition, itemInfo.prefabName);
-                GlobeController.instance.ChangeMode(GlobeMode.View);
-                
-                Backend.i.CreateTree(tree,(message)=>{
-                    GameManager.i.GetUser().UpdatePoints(emotion, -1*itemInfo.cost);
-                    Backend.i.UpdateUser((user)=>{
-                        GameManager.i.SetUser(user);
-                    });
-
-                    itemInfo = null;
-                    isActive = false;
-                    activeAlert.SetActive(false);
-                });
-                
-            }
+            itemInfo = null;
+            isActive = false;
+            activeAlert.SetActive(false);
+            placeBtn.gameObject.SetActive(false);
+            clone = null;
+        });
 
     }
 

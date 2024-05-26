@@ -45,6 +45,8 @@ public class User {
         }
     }
 
+    
+
     public int getPoint(Emotion emotion){
         switch(emotion){
             case Emotion.Joy:

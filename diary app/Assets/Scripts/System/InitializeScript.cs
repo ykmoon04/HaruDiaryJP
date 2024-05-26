@@ -18,7 +18,8 @@ public class InitializeScript : MonoBehaviour
         string token = LoadToken();        
         if (!string.IsNullOrEmpty(token))
         {
-            AutoLogin(token);
+            AutoLogin("66330047d0904657e6be587f");
+            // AutoLogin(token);
         }
         else
         {
@@ -38,6 +39,8 @@ public class InitializeScript : MonoBehaviour
             });
         }
     }
+
+    
 
     public void AutoLogin(string id){
         Backend.i?.ReadUser(id, (user)=>{
